@@ -41,11 +41,6 @@ public class QuerySimpleBuilder implements IQuerySimpleBuilder {
         tableDeclared = false;
     }
 
-    public setBuilder(StringBuffer builder) {
-        this.queryBuilder = builder;
-        this.whereBuilder.set
-    }
-
     /**
      * Sets the internal JoinExpressionBuilder
      @param QueryFieldExpressionBuilder the expression builder for table fields

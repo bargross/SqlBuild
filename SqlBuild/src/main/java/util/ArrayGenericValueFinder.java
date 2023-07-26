@@ -1,6 +1,8 @@
 package util;
 
 import util.comparator.GenericComparator;
+import validator.IValidator;
+
 import java.util.Arrays;
 
 public final class ArrayGenericValueFinder {

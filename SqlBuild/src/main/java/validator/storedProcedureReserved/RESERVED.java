@@ -63,7 +63,7 @@ public enum RESERVED {
     }
 
     public static String[] getAllKeywords() {
-        return Mapper.mapToArray(Arrays.stream(RESERVED.values()).toList(), x -> x.keyword);
+        return Mapper.mapToArray(Mapper.toList(Arrays.stream(RESERVED.values())), x -> x.keyword);
     }
 
     public String getKeyword() {

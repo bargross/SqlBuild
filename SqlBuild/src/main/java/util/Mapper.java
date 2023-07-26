@@ -3,6 +3,7 @@ package util;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 public class Mapper {
     public static <TValue extends Object, TResult extends Object> TResult[] map(TValue[] values, Function<TValue, TResult> predicate) {
@@ -55,6 +56,23 @@ public class Mapper {
         for(var value: values) {
             container.add(value);
         }
+
+        return container;
+    }
+
+    public static <TValue> List<TValue> toList(Stream<TValue> stream) {
+        if (stream == null) {
+            throw new NullPointerException("Stream is null");
+        }
+
+        if (stream.count() == 0) {
+            throw new IllegalArgumentException("Stream is Empty");
+        }
+
+        var length = (int)stream.count();
+        var container = new ArrayList<TValue>(length);
+
+        stream.forEach(v -> container.add(v));
 
         return container;
     }

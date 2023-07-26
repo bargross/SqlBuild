@@ -33,7 +33,7 @@ public final class StringValidator {
 
     private static boolean isWhiteSpace(String value) {
         if (value == null) {
-            throw new NullPointerException("");
+            throw new NullPointerException("Value is null");
         }
 
         String whiteSpace = " ".repeat(value.length());
@@ -43,7 +43,11 @@ public final class StringValidator {
 
     private static boolean hasSpaces(String value) {
         if (value == null) {
-            throw new NullPointerException("");
+            throw new NullPointerException("Value is null");
+        }
+
+        if (value == "") {
+            throw new IllegalArgumentException("Value is empty");
         }
 
         var length = value.length();
