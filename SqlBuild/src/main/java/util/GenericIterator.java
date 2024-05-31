@@ -1,11 +1,12 @@
 package util;
 
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 
 public class GenericIterator {
-    public static <TValue extends Object> void each(TValue[] values, Consumer<TValue> actionPredicate) {
+    public static <TValue> void each(TValue[] values, Consumer<TValue> actionPredicate) {
         validate(values);
 
         for(TValue value: values) {
@@ -13,7 +14,7 @@ public class GenericIterator {
         }
     }
 
-    public static <TValue extends Object> boolean contains(TValue[] values, BiFunction<TValue, Integer, Boolean> validator) {
+    public static <TValue> boolean contains(TValue[] values, BiFunction<TValue, Integer, Boolean> validator) {
         validate(values);
 
         for(var i = 0; i < values.length; i++) {
@@ -45,7 +46,7 @@ public class GenericIterator {
             return;
         }
 
-        if(Arrays.stream(values).allMatch(value -> value == null)) {
+        if(Arrays.stream(values).allMatch(Objects::isNull)) {
             throw new NullPointerException("Null value in sequence");
         }
     }

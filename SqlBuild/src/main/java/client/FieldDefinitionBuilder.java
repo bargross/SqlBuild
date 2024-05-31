@@ -2,6 +2,7 @@ package client;
 
 import client.enums.SQLFunction;
 import client.models.FieldDefinition;
+import util.Mapper;
 import validator.StringValidator;
 
 import java.util.ArrayList;
@@ -20,19 +21,19 @@ public class FieldDefinitionBuilder implements IFieldDefinitionBuilder {
     }
 
     public FieldDefinitionBuilder setField(String field, SQLFunction function) {
-        if(StringValidator.isEmptyOrWhiteSpace(field)) {
+        if (StringValidator.isEmptyOrWhiteSpace(field)) {
             throw new IllegalArgumentException("");
         }
 
-        if(StringValidator.isForbiddenKeyword(field)) {
+        if (StringValidator.isForbiddenKeyword(field)) {
             throw new IllegalArgumentException("");
         }
 
-        if(function == null) {
+        if (function == null) {
             throw new NullPointerException("");
         }
 
-        if(!fieldsInstantiated) {
+        if (!fieldsInstantiated) {
             fields = new ArrayList<>();
             fieldsInstantiated = true;
         }
@@ -44,6 +45,10 @@ public class FieldDefinitionBuilder implements IFieldDefinitionBuilder {
 
     public List<FieldDefinition> toList() {
         return fields;
+    }
+
+    public FieldDefinition[] toArray() {
+        return Mapper.toArray(fields);
     }
 
     public void clear() {

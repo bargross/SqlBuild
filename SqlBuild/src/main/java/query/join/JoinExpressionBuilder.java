@@ -93,7 +93,7 @@ public class JoinExpressionBuilder implements IJoinExpressionBuilder {
             throw new IllegalArgumentException();
         }
 
-        var join = JoinType.getJoin(type);
+        var join = SQLJoin.getJoin(type);
 
         var expression = String.format("%s %s%s", join, field, System.lineSeparator());
 

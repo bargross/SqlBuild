@@ -8,7 +8,7 @@ public class GenericValue {
     }
 
     public <TValue> TValue getAndCast() {
-        if(value == null) {
+        if (value == null) {
             return null;
         }
 

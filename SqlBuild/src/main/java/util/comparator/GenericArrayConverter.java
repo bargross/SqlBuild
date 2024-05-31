@@ -4,6 +4,7 @@ import util.ArrayGenericValueFinder;
 
 public final class GenericArrayConverter {
 
+    @SafeVarargs
     public static <TGenericValue> TGenericValue[] fromGenericElementsToArray(TGenericValue... values) {
         if(values == null) {
             throw new IllegalArgumentException("Invalid parameter/s");

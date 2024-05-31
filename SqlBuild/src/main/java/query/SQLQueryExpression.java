@@ -18,7 +18,7 @@ public enum SQLQueryExpression {
     LIKE("LIKE"),
     IN("IN");
 
-    private String key;
+    private final String key;
 
     SQLQueryExpression(String keyword) {
         this.key = keyword;
@@ -26,6 +26,6 @@ public enum SQLQueryExpression {
 
     public String getKeyword() { return key; }
 
-    public <TValue extends Object> String getKeywordWithPostFix(TValue postFix) { return key + postFix.toString(); }
-    public <TValue extends Object> String getKeywordWithPreFix(TValue preFix) { return preFix.toString() + key; }
+    public <TValue> String getKeywordWithPostFix(TValue postFix) { return key + postFix.toString(); }
+    public <TValue> String getKeywordWithPreFix(TValue preFix) { return preFix.toString() + key; }
 }

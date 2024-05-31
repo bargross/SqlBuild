@@ -15,13 +15,16 @@ public class StoredProcedureBuilder implements IStoredProcedureBuilder {
     public StoredProcedureBuilder(StringBuffer builder, QueryExtendedBuilder queryBuilder) {
         this.builder = builder;
         this.queryBuilder = queryBuilder;
-
-        this.queryBuilder.
     }
 
     public StoredProcedureBuilder() {
         this.builder = new StringBuffer();
         this.queryBuilder = new QueryExtendedBuilder(this.builder);
+    }
+
+    public StoredProcedureBuilder(StringBuffer builder, IQueryExtendedBuilder queryBuilder) {
+        this.builder = builder;
+        this.queryBuilder = queryBuilder;
     }
 
     public IStoredProcedureBuilder createProcedure(String name) {
@@ -38,6 +41,8 @@ public class StoredProcedureBuilder implements IStoredProcedureBuilder {
 
     public IStoredProcedureBuilder go(Consumer<IQueryExtendedBuilder> action) {
         action.accept(this.queryBuilder);
+
+        return this;
     }
 
     public StringBuffer getBuilder() {

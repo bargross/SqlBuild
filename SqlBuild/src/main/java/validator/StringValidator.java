@@ -5,7 +5,7 @@ import util.GenericIterator;
 public final class StringValidator {
 
     public static boolean isEmptyOrWhiteSpace(String value) {
-        return value == null || value.length() == 0 || isWhiteSpace(value);
+        return value == null || value.isEmpty() || isWhiteSpace(value);
     }
 
     public static boolean isForbiddenKeyword(String value) {
@@ -46,7 +46,7 @@ public final class StringValidator {
             throw new NullPointerException("Value is null");
         }
 
-        if (value == "") {
+        if (value.isEmpty()) {
             throw new IllegalArgumentException("Value is empty");
         }
 
