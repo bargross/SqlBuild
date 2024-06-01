@@ -1,4 +1,4 @@
-package query;
+package query.build;
 
 
 public enum SQLQueryExpression {

@@ -1,6 +1,4 @@
-package util.tuple;
-
-import util.GenericValue;
+package util.models;
 
 public interface ITuple<TItemOne, TItemTwo> {
     TItemOne getItemOne();

@@ -1,7 +1,7 @@
 package query.expression;
 
-import validator.ReservedKeywordValidator;
-import validator.StringValidator;
+import util.guard.ReservedKeywordGuard;
+import util.guard.StringGuard;
 
 public class QueryExpressionBuilder implements IQueryExpressionBuilder {
 
@@ -35,7 +35,7 @@ public class QueryExpressionBuilder implements IQueryExpressionBuilder {
      @return void
      */
     public void setField(String field) {
-        if(StringValidator.isEmptyOrWhiteSpace(field)) {
+        if(StringGuard.isEmptyOrWhiteSpace(field)) {
             throw new IllegalArgumentException("Invalid field");
         }
 
@@ -48,8 +48,8 @@ public class QueryExpressionBuilder implements IQueryExpressionBuilder {
      @return void
      */
     public void setBuilder(StringBuffer builder) {
-        if(builder == null) {
-            throw new NullPointerException(builder.getClass().getName());
+        if (builder == null) {
+            throw new NullPointerException("Builder is null");
         }
 
         this.builder = builder;
@@ -64,9 +64,7 @@ public class QueryExpressionBuilder implements IQueryExpressionBuilder {
     public String equals(String fieldValue) {
         defaultValidation(fieldValue);
 
-        var expression = String.format("%s = %s%s", fieldName, fieldValue, System.lineSeparator());
-
-        return expression;
+        return String.format("%s = %s%s", fieldName, fieldValue, System.lineSeparator());
     }
 
     /**
@@ -78,7 +76,7 @@ public class QueryExpressionBuilder implements IQueryExpressionBuilder {
     public void isEquals(String fieldValue) {
         var expression = equals(fieldValue);
 
-        if(builder != null) {
+        if(builder == null) {
             throw new NullPointerException("Builder (Buffer) is null");
         }
 
@@ -94,9 +92,7 @@ public class QueryExpressionBuilder implements IQueryExpressionBuilder {
     public String like(String fieldValue) {
         defaultValidation(fieldValue);
 
-        var expression = String.format("%s LIKE %s%s", fieldName, fieldValue, System.lineSeparator());
-
-        return expression;
+        return String.format("%s LIKE %s%s", fieldName, fieldValue, System.lineSeparator());
     }
 
     /**
@@ -108,7 +104,7 @@ public class QueryExpressionBuilder implements IQueryExpressionBuilder {
     public void isLike(String fieldValue) {
         var expression = like(fieldValue);
 
-        if(builder != null) {
+        if (builder == null) {
             throw new NullPointerException("Builder (Buffer) is null");
         }
 
@@ -121,13 +117,11 @@ public class QueryExpressionBuilder implements IQueryExpressionBuilder {
      @return String
      */
     public String in(String... fieldValues) {
-        if(ReservedKeywordValidator.hasReservedKeywords(fieldValues)) {
+        if (ReservedKeywordGuard.hasReservedKeywords(fieldValues)) {
             throw new IllegalArgumentException("Forbidden word found in sequence");
         }
 
-        var expression = String.format("%s IN (%s)%s", fieldName, String.join(",", fieldValues), System.lineSeparator());
-
-        return expression;
+        return String.format("%s IN (%s)%s", fieldName, String.join(",", fieldValues), System.lineSeparator());
     }
 
     /**
@@ -139,7 +133,7 @@ public class QueryExpressionBuilder implements IQueryExpressionBuilder {
 
         var expression = in(fieldValues);
 
-        if(builder != null) {
+        if (builder == null) {
             throw new NullPointerException("Builder (Buffer) is null");
         }
 
@@ -147,11 +141,11 @@ public class QueryExpressionBuilder implements IQueryExpressionBuilder {
     }
 
     private void defaultValidation(String value) {
-        if(StringValidator.isEmptyOrWhiteSpace(value)) {
+        if (StringGuard.isEmptyOrWhiteSpace(value)) {
             throw new IllegalArgumentException();
         }
 
-        if(StringValidator.isForbiddenKeyword(value)) {
+        if (StringGuard.isForbiddenKeyword(value)) {
             throw new IllegalArgumentException();
         }
     }

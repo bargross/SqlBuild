@@ -1,6 +1,6 @@
-package validator.storedProcedureReserved;
+package util.guard.storedProcedureReserved;
 
-import util.Mapper;
+import util.mapper.Mapper;
 
 import java.util.Arrays;
 

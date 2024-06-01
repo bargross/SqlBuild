@@ -1,9 +1,9 @@
 package procedure;
 
-import query.IQueryExtendedBuilder;
-import query.QueryExtendedBuilder;
-import validator.ReservedKeywordValidator;
-import validator.storedProcedureReserved.RESERVED;
+import query.build.IQueryExtendedBuilder;
+import query.build.QueryExtendedBuilder;
+import util.guard.ReservedKeywordGuard;
+import util.guard.storedProcedureReserved.RESERVED;
 
 import java.util.function.Consumer;
 
@@ -28,7 +28,7 @@ public class StoredProcedureBuilder implements IStoredProcedureBuilder {
     }
 
     public IStoredProcedureBuilder createProcedure(String name) {
-        if (ReservedKeywordValidator.hasReservedKeywords(name)) {
+        if (ReservedKeywordGuard.hasReservedKeywords(name)) {
             throw new IllegalArgumentException("Invalid keyword as name");
         }
 

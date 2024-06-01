@@ -1,4 +1,6 @@
-package util;
+package util.mapper;
+
+import util.guard.StreamGuard;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -70,11 +72,36 @@ public class Mapper {
 
         var container = new ArrayList<TValue>(length);
 
-        stream.forEachOrdered(container::add);
+        var newStream = StreamGuard.isConsumed(stream);
+
+        newStream.ifPresent(x -> x.forEachOrdered(container::add));
 
         return container;
     }
 
+    public static char[] toCharArray(String value) {
+        var length = value.length();
+        char[] characters = new char[value.length()];
+
+        for (int i = 0; i < length; ++i) {
+            characters[i] = value.charAt(i);
+        }
+
+        return characters;
+    }
+
+    public static Character[] toCharacterArray(String value) {
+        var length = value.length();
+        Character[] characters = new Character[value.length()];
+
+        for (int i = 0; i < length; ++i) {
+            characters[i] = value.charAt(i);
+        }
+
+        return characters;
+    }
+
+    @SuppressWarnings("unchecked")
     public static <TValue> TValue[] toArray(List<TValue> values) {
         var container = (TValue[])new Object[values.size()];
 

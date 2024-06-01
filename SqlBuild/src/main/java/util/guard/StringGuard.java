@@ -1,8 +1,9 @@
-package validator;
+package util.guard;
 
-import util.GenericIterator;
+import util.iterator.GenericIterator;
+import util.mapper.Mapper;
 
-public final class StringValidator {
+public final class StringGuard {
 
     public static boolean isEmptyOrWhiteSpace(String value) {
         return value == null || value.isEmpty() || isWhiteSpace(value);
@@ -11,13 +12,13 @@ public final class StringValidator {
     public static boolean isForbiddenKeyword(String value) {
         defaultValidation(value, true);
 
-        return ReservedKeywordValidator.hasReservedKeywords(value.toUpperCase());
+        return ReservedKeywordGuard.hasReservedKeywords(value.toUpperCase());
     }
 
     public static boolean containsExcept(String value, String... except) {
         defaultValidation(value, false);
 
-        return ReservedKeywordValidator.hasReservedKeywordsExcept(except, value.toUpperCase());
+        return ReservedKeywordGuard.hasReservedKeywordsExcept(except, value.toUpperCase());
     }
 
     private static void defaultValidation(String value, boolean lookupSpaces) {
@@ -51,6 +52,6 @@ public final class StringValidator {
         }
 
         var length = value.length();
-        return GenericIterator.contains(GenericIterator.toCharArray(value), (character, i) -> i < length && value.charAt(i) == ' ');
+        return GenericIterator.contains(Mapper.toCharacterArray(value), (character, i) -> i < length && value.charAt(i) == ' ');
     }
 }

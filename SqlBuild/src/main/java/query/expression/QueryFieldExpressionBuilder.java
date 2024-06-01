@@ -2,9 +2,9 @@ package query.expression;
 
 import client.enums.SQLFunction;
 import client.models.FieldDefinition;
-import util.Mapper;
-import util.tuple.Tuple;
-import validator.StringValidator;
+import util.mapper.Mapper;
+import util.models.Tuple;
+import util.guard.StringGuard;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -28,7 +28,7 @@ public class QueryFieldExpressionBuilder implements IQueryFieldExpressionBuilder
 
         Arrays.stream(fields).forEach(fieldDefinition -> {
             var field = fieldDefinition.getField();
-            if(StringValidator.isEmptyOrWhiteSpace(field)) {
+            if(StringGuard.isEmptyOrWhiteSpace(field)) {
                 throw new IllegalArgumentException("Invalid field");
             }
 
@@ -46,7 +46,7 @@ public class QueryFieldExpressionBuilder implements IQueryFieldExpressionBuilder
     public IQueryFieldExpressionBuilder setMany(List<FieldDefinition> fields) {
         fields.forEach(fieldDefinition -> {
             var field = fieldDefinition.getField();
-            if(StringValidator.isEmptyOrWhiteSpace(field)) {
+            if(StringGuard.isEmptyOrWhiteSpace(field)) {
                 throw new IllegalArgumentException("Invalid field");
             }
 
@@ -62,11 +62,11 @@ public class QueryFieldExpressionBuilder implements IQueryFieldExpressionBuilder
     }
 
     private FieldDefinition setField(String field, SQLFunction sqlFunc) {
-        if(StringValidator.isEmptyOrWhiteSpace(field)) {
+        if(StringGuard.isEmptyOrWhiteSpace(field)) {
             throw new IllegalArgumentException("Field cannot be null or empty");
         }
 
-        if(StringValidator.isForbiddenKeyword(field)) {
+        if(StringGuard.isForbiddenKeyword(field)) {
             throw new IllegalArgumentException("Field cannot be or contain a reserved sql keyword");
         }
 

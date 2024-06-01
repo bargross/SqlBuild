@@ -1,4 +1,4 @@
-package util;
+package util.iterator;
 
 import java.util.Arrays;
 import java.util.Objects;
@@ -26,27 +26,16 @@ public class GenericIterator {
         return false;
     }
 
-    public static Character[] toCharArray(String value) {
-        var length = value.length();
-        var newCharArray = new Character[value.length()];
-
-        for(var i = 0; i < length; i++) {
-            newCharArray[i] = value.charAt(i);
-        }
-
-        return newCharArray;
-    }
-
     private static <TValue> void validate(TValue[] values) {
-        if(values == null) {
+        if (values == null) {
             throw new IllegalArgumentException("Invalid array argument");
         }
 
-        if(values.length == 0) {
+        if (values.length == 0) {
             return;
         }
 
-        if(Arrays.stream(values).allMatch(Objects::isNull)) {
+        if (Arrays.stream(values).allMatch(Objects::isNull)) {
             throw new NullPointerException("Null value in sequence");
         }
     }

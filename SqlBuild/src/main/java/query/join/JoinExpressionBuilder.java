@@ -1,8 +1,8 @@
 package query.join;
 
 import client.enums.SQLJoin;
-import query.IQuerySimpleBuilder;
-import validator.StringValidator;
+import query.build.IQuerySimpleBuilder;
+import util.guard.StringGuard;
 import java.util.function.Consumer;
 import query.expression.*;
 
@@ -25,11 +25,11 @@ public class JoinExpressionBuilder implements IJoinExpressionBuilder {
 
     private JoinExpressionBuilder(StringBuffer builder, String field, QueryExpressionBuilder expBuilder, boolean validateField) {
 
-        if(validateField && StringValidator.isEmptyOrWhiteSpace(field)) {
+        if(validateField && StringGuard.isEmptyOrWhiteSpace(field)) {
             throw new IllegalArgumentException();
         }
 
-        if(validateField && StringValidator.isForbiddenKeyword(field)) {
+        if(validateField && StringGuard.isForbiddenKeyword(field)) {
             throw new IllegalArgumentException();
         }
 
@@ -52,7 +52,7 @@ public class JoinExpressionBuilder implements IJoinExpressionBuilder {
      @return QuerySimpleBuilder
      */
     public void setField(String field) {
-        if(StringValidator.isEmptyOrWhiteSpace(field)) {
+        if(StringGuard.isEmptyOrWhiteSpace(field)) {
            throw new IllegalArgumentException("Invalid field");
         }
 
@@ -72,8 +72,8 @@ public class JoinExpressionBuilder implements IJoinExpressionBuilder {
      @return QuerySimpleBuilder
      */
     public void setBuilder(StringBuffer builder) {
-        if(builder == null) {
-            throw new NullPointerException(builder.getClass().getName());
+        if (builder == null) {
+            throw new NullPointerException("Builder is null");
         }
 
         this.expressionBuilder.setBuilder(builder);
@@ -85,11 +85,11 @@ public class JoinExpressionBuilder implements IJoinExpressionBuilder {
      @return QuerySimpleBuilder
      */
     public IQuerySimpleBuilder with(String field, SQLJoin type) {
-        if(StringValidator.isEmptyOrWhiteSpace(field)) {
+        if(StringGuard.isEmptyOrWhiteSpace(field)) {
             throw new IllegalArgumentException("Invalid field name");
         }
 
-        if(StringValidator.isForbiddenKeyword(field)) {
+        if(StringGuard.isForbiddenKeyword(field)) {
             throw new IllegalArgumentException();
         }
 
@@ -103,7 +103,7 @@ public class JoinExpressionBuilder implements IJoinExpressionBuilder {
     }
 
     public IQuerySimpleBuilder on(String field, Consumer<IQueryExpressionBuilder> delegate) {
-        if(StringValidator.isEmptyOrWhiteSpace(field)) {
+        if(StringGuard.isEmptyOrWhiteSpace(field)) {
             throw new IllegalArgumentException("Invalid field/table");
         }
 

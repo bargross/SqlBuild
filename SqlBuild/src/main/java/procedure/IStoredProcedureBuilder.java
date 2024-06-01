@@ -1,8 +1,6 @@
 package procedure;
 
-import query.IQueryExtendedBuilder;
-import query.IQuerySimpleBuilder;
-import query.expression.IQueryFieldExpressionBuilder;
+import query.build.IQueryExtendedBuilder;
 
 import java.util.function.Consumer;
 

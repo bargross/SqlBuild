@@ -1,7 +1,7 @@
 package query.where;
 
-import query.IQuerySimpleBuilder;
-import validator.StringValidator;
+import query.build.IQuerySimpleBuilder;
+import util.guard.StringGuard;
 import query.expression.IQueryExpressionBuilder;
 import query.expression.QueryExpressionBuilder;
 import query.join.IJoinExpressionBuilder;
@@ -33,11 +33,11 @@ public class WhereExpressionBuilder implements IWhereExpressionBuilder {
             throw new NullPointerException("Root is null");
         }
 
-        if(validateField && StringValidator.isEmptyOrWhiteSpace(field)) {
+        if(validateField && StringGuard.isEmptyOrWhiteSpace(field)) {
             throw new IllegalArgumentException("Invalid field name");
         }
 
-        if(validateField && StringValidator.isForbiddenKeyword(field)) {
+        if(validateField && StringGuard.isForbiddenKeyword(field)) {
             throw new IllegalArgumentException("Field name has or is a reserved sql keyword");
         }
 
@@ -69,11 +69,11 @@ public class WhereExpressionBuilder implements IWhereExpressionBuilder {
      @throws IllegalArgumentException if the field is empty or if is a forbidden sql keyword
      */
     public void setField(String field) {
-        if(StringValidator.isEmptyOrWhiteSpace(field)) {
+        if(StringGuard.isEmptyOrWhiteSpace(field)) {
             throw new IllegalArgumentException("Invalid field");
         }
 
-        if(StringValidator.isForbiddenKeyword(field)) {
+        if(StringGuard.isForbiddenKeyword(field)) {
             throw new IllegalArgumentException("Forbidden field name");
         }
 
@@ -90,8 +90,8 @@ public class WhereExpressionBuilder implements IWhereExpressionBuilder {
      @throws NullPointerException if the parameter is null
      */
     public void setJoinBuilder(JoinExpressionBuilder joinBuilder) {
-        if(joinBuilder == null) {
-            throw new NullPointerException(joinBuilder.getClass().getName());
+        if (joinBuilder == null) {
+            throw new NullPointerException("Builder is null");
         }
 
         this.joinBuilder = joinBuilder;
@@ -129,7 +129,7 @@ public class WhereExpressionBuilder implements IWhereExpressionBuilder {
 
     private IQuerySimpleBuilder getQueryBuilderRef() {
         if(querySimpleBuilderRef == null) {
-            throw new NullPointerException(String.format("% ref is null", IQuerySimpleBuilder.class.getName()));
+            throw new NullPointerException(String.format("%s ref is null", IQuerySimpleBuilder.class.getName()));
         }
 
         return querySimpleBuilderRef;

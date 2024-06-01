@@ -1,7 +1,7 @@
 
 import client.FieldDefinitionBuilder;
 import client.enums.SQLFunction;
-import query.*;
+import query.build.QuerySimpleBuilder;
 
 public class Program {
     public void Main(String[] args) {
@@ -18,5 +18,7 @@ public class Program {
                 .join("table-c")
                 .on("b", b -> b.equals("25"))
             .toString();
+
+        System.out.println(query);
     }
 }

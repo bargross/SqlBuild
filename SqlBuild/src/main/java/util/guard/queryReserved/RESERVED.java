@@ -1,4 +1,4 @@
-package validator.queryReserved;
+package util.guard.queryReserved;
 
 public final class RESERVED {
     public static String[] Keywords = {

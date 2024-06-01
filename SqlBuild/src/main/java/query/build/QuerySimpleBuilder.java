@@ -1,13 +1,14 @@
-package query;
+package query.build;
 
 import query.expression.IQueryFieldExpressionBuilder;
 import query.expression.QueryFieldExpressionBuilder;
-import util.tuple.ITuple;
-import validator.*;
+import util.guard.StringGuard;
+import util.models.ITuple;
+import guard.*;
 import query.join.*;
 import query.where.*;
-import util.Mapper;
-import util.tuple.Tuple;
+import util.mapper.Mapper;
+import util.models.Tuple;
 
 import java.util.function.Consumer;
 
@@ -102,7 +103,7 @@ public class QuerySimpleBuilder implements IQuerySimpleBuilder {
             throw new IllegalCallerException("Columns or table not defined");
         }
 
-        if(StringValidator.isForbiddenKeyword(tableName)) {
+        if(StringGuard.isForbiddenKeyword(tableName)) {
             throw new IllegalArgumentException("Forbidden sql keyword found in sequence");
         }
 
@@ -161,10 +162,6 @@ public class QuerySimpleBuilder implements IQuerySimpleBuilder {
     @Override
     public String toString() {
         clearRefs();
-
-        if(queryBuilder == null || queryBuilder.length() == 0) {
-            return "";
-        }
 
         return queryBuilder.toString();
     }

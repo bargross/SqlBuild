@@ -1,11 +1,11 @@
-package validator;
+package util.guard;
 
-import util.ArrayGenericValueFinder;
-import validator.queryReserved.*;
+import util.search.ArrayGenericValueFinder;
+import util.guard.queryReserved.RESERVED;
 
 import java.util.Arrays;
 
-public final class ReservedKeywordValidator {
+public final class ReservedKeywordGuard {
 
     public static boolean hasReservedKeywords(String... fieldValues) {
         return hasReserved(fieldValues, null, false);
@@ -24,7 +24,7 @@ public final class ReservedKeywordValidator {
             .stream(values)
             .anyMatch(fieldValue -> {
                 var wordIsReserved = ArrayGenericValueFinder.contains(RESERVED.Keywords, fieldValue.toUpperCase())
-                        && ArrayGenericValueFinder.contains(validator.storedProcedureReserved.RESERVED.getAllKeywords(), fieldValue.toUpperCase());
+                        && ArrayGenericValueFinder.contains(util.guard.storedProcedureReserved.RESERVED.getAllKeywords(), fieldValue.toUpperCase());
 
                 return excludeWords ? wordIsReserved && !ArrayGenericValueFinder.contains(exclude, fieldValue) : wordIsReserved;
             });

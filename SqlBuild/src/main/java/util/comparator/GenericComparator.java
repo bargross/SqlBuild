@@ -6,7 +6,7 @@ public class GenericComparator<TValue> {
     public Comparator<TValue> comparator;
 
     public GenericComparator() {
-        comparator = ComparatorGenerator.<TValue>generate();
+        comparator = ComparatorGenerator.generate();
     }
 
     public boolean isGreater(TValue value, TValue valueToCompareTo) {

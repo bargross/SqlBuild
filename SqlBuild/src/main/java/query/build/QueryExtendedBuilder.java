@@ -1,8 +1,8 @@
-package query;
+package query.build;
 
 import query.expression.IQueryFieldExpressionBuilder;
-import util.GenericIterator;
-import util.Mapper;
+import util.iterator.GenericIterator;
+import util.mapper.Mapper;
 import java.util.function.Consumer;
 
 public class QueryExtendedBuilder extends QuerySimpleBuilder implements IQueryExtendedBuilder {

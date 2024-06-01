@@ -1,7 +1,7 @@
 package query.expression;
 
 import client.enums.SQLFunction;
-import validator.StringValidator;
+import util.guard.StringGuard;
 
 public enum SQLFunctions {
     MAX("MAX"),
@@ -20,7 +20,7 @@ public enum SQLFunctions {
     public String getKey() { return key; }
 
     public static String getKeyWithValue(String field, SQLFunction type) {
-        if(StringValidator.isEmptyOrWhiteSpace(field)) {
+        if(StringGuard.isEmptyOrWhiteSpace(field)) {
             throw new IllegalArgumentException("field cannot be null or empty");
         }
 
