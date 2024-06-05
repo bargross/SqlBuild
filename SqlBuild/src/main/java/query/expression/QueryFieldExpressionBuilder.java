@@ -2,15 +2,16 @@ package query.expression;
 
 import client.enums.SQLFunction;
 import client.models.FieldDefinition;
-import util.Mapper;
-import util.tuple.Tuple;
-import validator.StringValidator;
+import util.mapper.Mapper;
+import util.models.Tuple;
+import util.guard.StringGuard;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 public class QueryFieldExpressionBuilder implements IQueryFieldExpressionBuilder {
-    private List<FieldDefinition> fields;
+    private final List<FieldDefinition> fields;
 
     public QueryFieldExpressionBuilder() {
         fields = new ArrayList<>();
@@ -24,16 +25,22 @@ public class QueryFieldExpressionBuilder implements IQueryFieldExpressionBuilder
         return this;
     }
 
-    public IQueryFieldExpressionBuilder setMany(FieldDefinition[] fields) {
+    /**
+     *
+     * @param fields field definition
+     * @return IQueryFieldExpressionBuilder
+     * @throws IllegalArgumentException description...
+     */
+    public IQueryFieldExpressionBuilder setMany(FieldDefinition[] fields) throws IllegalArgumentException{
 
         Arrays.stream(fields).forEach(fieldDefinition -> {
             var field = fieldDefinition.getField();
-            if(StringValidator.isEmptyOrWhiteSpace(field)) {
+            if(StringGuard.isEmptyOrWhiteSpace(field)) {
                 throw new IllegalArgumentException("Invalid field");
             }
 
             var function = fieldDefinition.getFunction();
-            if(fieldDefinition.getFunction() == null) {
+            if (function == null) {
                 throw new NullPointerException(String.format("Missing function on function definition for field %s", field));
             }
         });
@@ -46,7 +53,7 @@ public class QueryFieldExpressionBuilder implements IQueryFieldExpressionBuilder
     public IQueryFieldExpressionBuilder setMany(List<FieldDefinition> fields) {
         fields.forEach(fieldDefinition -> {
             var field = fieldDefinition.getField();
-            if(StringValidator.isEmptyOrWhiteSpace(field)) {
+            if(StringGuard.isEmptyOrWhiteSpace(field)) {
                 throw new IllegalArgumentException("Invalid field");
             }
 
@@ -62,11 +69,11 @@ public class QueryFieldExpressionBuilder implements IQueryFieldExpressionBuilder
     }
 
     private FieldDefinition setField(String field, SQLFunction sqlFunc) {
-        if(StringValidator.isEmptyOrWhiteSpace(field)) {
+        if(StringGuard.isEmptyOrWhiteSpace(field)) {
             throw new IllegalArgumentException("Field cannot be null or empty");
         }
 
-        if(StringValidator.isForbiddenKeyword(field)) {
+        if(StringGuard.isForbiddenKeyword(field)) {
             throw new IllegalArgumentException("Field cannot be or contain a reserved sql keyword");
         }
 
@@ -85,12 +92,12 @@ public class QueryFieldExpressionBuilder implements IQueryFieldExpressionBuilder
         return mappedModels;
     }
 
-    private  Tuple[] mapClientModelsToTuples(List<FieldDefinition> fields) {
-        if(fields.size() == 0) {
-            return new Tuple[0];
+    private  Tuple<String, String>[] mapClientModelsToTuples(List<FieldDefinition> fields) {
+        if (fields.isEmpty()) {
+            throw new IllegalArgumentException("Collection is empty.");
         }
 
-        if(fields.stream().anyMatch(field -> field == null)) {
+        if(fields.stream().anyMatch(Objects::isNull)) {
             throw new NullPointerException("Invalid field mapping found in sequence");
         }
 
@@ -98,7 +105,7 @@ public class QueryFieldExpressionBuilder implements IQueryFieldExpressionBuilder
             var field = fieldMapping.getField();
 
             var function = fieldMapping.getFunction();
-            if(function == SQLFunction.NOOP) {
+            if (function == SQLFunction.NOOP) {
                 return new Tuple<>(field, null);
             }
 

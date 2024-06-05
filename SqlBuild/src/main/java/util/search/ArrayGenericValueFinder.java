@@ -1,6 +1,8 @@
-package util;
+package util.search;
 
 import util.comparator.GenericComparator;
+import util.guard.IGuard;
+
 import java.util.Arrays;
 
 public final class ArrayGenericValueFinder {
@@ -19,11 +21,11 @@ public final class ArrayGenericValueFinder {
         return find(values, value) != -1;
     }
 
-    public static <TValue> int find(TValue[] values, IValidator<TValue> validator) {
+    public static <TValue> int find(TValue[] values, IGuard<TValue> validator) {
         ensureValuesAreValid(values);
 
-        for(int index=0; index < values.length; ++index) {
-            if(validator.validate(values[index])) {
+        for (int index = 0; index < values.length; ++index) {
+            if (validator.validate(values[index])) {
                 return index;
             }
         }
@@ -48,15 +50,15 @@ public final class ArrayGenericValueFinder {
     private static <TValue> int binarySearch(GenericComparator<TValue> comparator, TValue[] values, TValue value, int min, int max) {
         int mid = min + (max - min) / 2;
 
-        if(comparator.isGreater(values[mid], value)) {
+        if (comparator.isGreater(values[mid], value)) {
             return binarySearch(comparator, values, value, min + 1, max);
         }
 
-        if(comparator.isLessThan(values[mid], value)) {
+        if (comparator.isLessThan(values[mid], value)) {
             return binarySearch(comparator, values, value, min, mid - 1);
         }
 
-        if(comparator.isEqual(values[mid], value)) {
+        if (comparator.isEqual(values[mid], value)) {
             return mid;
         }
 

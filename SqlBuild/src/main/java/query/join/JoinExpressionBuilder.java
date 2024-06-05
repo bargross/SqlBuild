@@ -1,14 +1,14 @@
 package query.join;
 
 import client.enums.SQLJoin;
-import query.IQuerySimpleBuilder;
-import validator.StringValidator;
+import query.build.IQuerySimpleBuilder;
+import util.guard.StringGuard;
 import java.util.function.Consumer;
 import query.expression.*;
 
 public class JoinExpressionBuilder implements IJoinExpressionBuilder {
     private final StringBuffer builder;
-    private QueryExpressionBuilder expressionBuilder;
+    private final QueryExpressionBuilder expressionBuilder;
     private IQuerySimpleBuilder querySimpleBuilder;
 
     public JoinExpressionBuilder(StringBuffer builder) {
@@ -25,11 +25,11 @@ public class JoinExpressionBuilder implements IJoinExpressionBuilder {
 
     private JoinExpressionBuilder(StringBuffer builder, String field, QueryExpressionBuilder expBuilder, boolean validateField) {
 
-        if(validateField && StringValidator.isEmptyOrWhiteSpace(field)) {
+        if(validateField && StringGuard.isEmptyOrWhiteSpace(field)) {
             throw new IllegalArgumentException();
         }
 
-        if(validateField && StringValidator.isForbiddenKeyword(field)) {
+        if(validateField && StringGuard.isForbiddenKeyword(field)) {
             throw new IllegalArgumentException();
         }
 
@@ -48,11 +48,11 @@ public class JoinExpressionBuilder implements IJoinExpressionBuilder {
 
     /**
      *
-     @param String table name
-     @return QuerySimpleBuilder
+     @param field table name
+     @throws IllegalArgumentException invalid field
      */
     public void setField(String field) {
-        if(StringValidator.isEmptyOrWhiteSpace(field)) {
+        if(StringGuard.isEmptyOrWhiteSpace(field)) {
            throw new IllegalArgumentException("Invalid field");
         }
 
@@ -62,18 +62,19 @@ public class JoinExpressionBuilder implements IJoinExpressionBuilder {
     public void setQueryBuilderRef(IQuerySimpleBuilder querySimpleBuilder) {
         this.querySimpleBuilder = querySimpleBuilder;
     }
+
     public void clearQueryBuilderRef() {
         this.querySimpleBuilder = null;
     }
 
     /**
      *
-     @param String table name
-     @return QuerySimpleBuilder
+     @param builder sets builder (buffer)
+     @throws NullPointerException builder not set
      */
     public void setBuilder(StringBuffer builder) {
-        if(builder == null) {
-            throw new NullPointerException(builder.getClass().getName());
+        if (builder == null) {
+            throw new NullPointerException("Builder is null");
         }
 
         this.expressionBuilder.setBuilder(builder);
@@ -81,19 +82,21 @@ public class JoinExpressionBuilder implements IJoinExpressionBuilder {
 
     /**
      *
-     @param String table name
+     @param field table name
+     @param type join type
      @return QuerySimpleBuilder
+     @throws IllegalArgumentException forbidden keyword used.
      */
     public IQuerySimpleBuilder with(String field, SQLJoin type) {
-        if(StringValidator.isEmptyOrWhiteSpace(field)) {
+        if (StringGuard.isEmptyOrWhiteSpace(field)) {
             throw new IllegalArgumentException("Invalid field name");
         }
 
-        if(StringValidator.isForbiddenKeyword(field)) {
+        if (StringGuard.isForbiddenKeyword(field)) {
             throw new IllegalArgumentException();
         }
 
-        var join = JoinType.getJoin(type);
+        var join = SQLJoin.getJoin(type);
 
         var expression = String.format("%s %s%s", join, field, System.lineSeparator());
 
@@ -102,8 +105,15 @@ public class JoinExpressionBuilder implements IJoinExpressionBuilder {
         return querySimpleBuilder;
     }
 
+    /**
+     *
+     @param field table name
+     @param delegate delegate expression builder
+     @return QuerySimpleBuilder
+     @throws IllegalArgumentException forbidden keyword used.
+     */
     public IQuerySimpleBuilder on(String field, Consumer<IQueryExpressionBuilder> delegate) {
-        if(StringValidator.isEmptyOrWhiteSpace(field)) {
+        if(StringGuard.isEmptyOrWhiteSpace(field)) {
             throw new IllegalArgumentException("Invalid field/table");
         }
 

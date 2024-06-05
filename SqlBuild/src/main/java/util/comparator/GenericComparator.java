@@ -2,11 +2,11 @@ package util.comparator;
 
 import java.util.Comparator;
 
-public class GenericComparator<TValue extends Object> {
+public class GenericComparator<TValue> {
     public Comparator<TValue> comparator;
 
     public GenericComparator() {
-        comparator = ComparatorGenerator.<TValue>generate();
+        comparator = ComparatorGenerator.generate();
     }
 
     public boolean isGreater(TValue value, TValue valueToCompareTo) {
@@ -22,19 +22,19 @@ public class GenericComparator<TValue extends Object> {
     }
 
     private boolean is(ComparatorOperators operator, TValue value, TValue valueToCompareTo) {
-        if(value == null) {
+        if (value == null) {
             throw new IllegalArgumentException("Invalid value");
         }
 
-        if(value == null) {
+        if (valueToCompareTo == null) {
             throw new IllegalArgumentException("Invalid value to compare to");
         }
 
-        switch(operator) {
-            case EQUAL: return comparator.compare(value, valueToCompareTo) == 0;
-            case LESSTHAN: return comparator.compare(value, valueToCompareTo) < 0;
-            case GREATERTHAN: return comparator.compare(value, valueToCompareTo) > 0;
-            default: return false;
-        }
+        return switch (operator) {
+            case EQUAL -> comparator.compare(value, valueToCompareTo) == 0;
+            case LESSTHAN -> comparator.compare(value, valueToCompareTo) < 0;
+            case GREATERTHAN -> comparator.compare(value, valueToCompareTo) > 0;
+            default -> false;
+        };
     }
 }

@@ -1,7 +1,7 @@
 package query.where;
 
-import query.IQuerySimpleBuilder;
-import validator.StringValidator;
+import query.build.IQuerySimpleBuilder;
+import util.guard.StringGuard;
 import query.expression.IQueryExpressionBuilder;
 import query.expression.QueryExpressionBuilder;
 import query.join.IJoinExpressionBuilder;
@@ -10,9 +10,10 @@ import query.join.JoinExpressionBuilder;
 import java.util.function.Consumer;
 
 public class WhereExpressionBuilder implements IWhereExpressionBuilder {
-    private final QueryExpressionBuilder expressionBuilder;
-    private JoinExpressionBuilder joinBuilder;
-    private IQuerySimpleBuilder querySimpleBuilderRef;
+    private final QueryExpressionBuilder _expressionBuilder;
+    private JoinExpressionBuilder _joinBuilder;
+    private IQuerySimpleBuilder _querySimpleBuilderRef;
+    private final StringBuffer _rootBuilder;
     private String field;
 
     public WhereExpressionBuilder(StringBuffer rootBuilder) {
@@ -29,34 +30,36 @@ public class WhereExpressionBuilder implements IWhereExpressionBuilder {
 
     private WhereExpressionBuilder(StringBuffer rootBuilder, JoinExpressionBuilder joinBuilder, String field, boolean validateField) throws NullPointerException {
 
-        if(rootBuilder == null) {
+        if (rootBuilder == null) {
             throw new NullPointerException("Root is null");
         }
 
-        if(validateField && StringValidator.isEmptyOrWhiteSpace(field)) {
+        if (validateField && StringGuard.isEmptyOrWhiteSpace(field)) {
             throw new IllegalArgumentException("Invalid field name");
         }
 
-        if(validateField && StringValidator.isForbiddenKeyword(field)) {
+        if (validateField && StringGuard.isForbiddenKeyword(field)) {
             throw new IllegalArgumentException("Field name has or is a reserved sql keyword");
         }
 
-        if(validateField) {
-            expressionBuilder = new QueryExpressionBuilder(field, rootBuilder);
+        _rootBuilder = rootBuilder;
+
+        if (validateField) {
+            _expressionBuilder = new QueryExpressionBuilder(field, rootBuilder);
         } else {
-            expressionBuilder = new QueryExpressionBuilder(rootBuilder);
+            _expressionBuilder = new QueryExpressionBuilder(rootBuilder);
         }
 
-        if(joinBuilder == null) {
-            if(validateField) {
-                this.joinBuilder = new JoinExpressionBuilder(rootBuilder, field);
+        if (joinBuilder == null) {
+            if (validateField) {
+                this._joinBuilder = new JoinExpressionBuilder(rootBuilder, field);
             } else {
-                this.joinBuilder = new JoinExpressionBuilder(rootBuilder);
+                this._joinBuilder = new JoinExpressionBuilder(rootBuilder);
             }
         } else {
             joinBuilder.setBuilder(rootBuilder);
 
-            this.joinBuilder = joinBuilder;
+            this._joinBuilder = joinBuilder;
         }
 
         this.field = field;
@@ -64,74 +67,76 @@ public class WhereExpressionBuilder implements IWhereExpressionBuilder {
 
     /**
      * Sets the field/property/column we're querying
-     @param String the column within sql the table
-     @return void
+     @param field the column within sql the table
      @throws IllegalArgumentException if the field is empty or if is a forbidden sql keyword
      */
     public void setField(String field) {
-        if(StringValidator.isEmptyOrWhiteSpace(field)) {
+        if (StringGuard.isEmptyOrWhiteSpace(field)) {
             throw new IllegalArgumentException("Invalid field");
         }
 
-        if(StringValidator.isForbiddenKeyword(field)) {
+        if (StringGuard.isForbiddenKeyword(field)) {
             throw new IllegalArgumentException("Forbidden field name");
         }
 
-        this.expressionBuilder.setField(field);
-        this.joinBuilder.setField(field);
+        this._expressionBuilder.setField(field);
+        this._joinBuilder.setField(field);
 
         this.field = field;
     }
 
     /**
      * Sets the internal JoinExpressionBuilder
-     @param JoinExpressionBuilder the join builder used internally
-     @return void
+     @param joinBuilder the join builder used internally
      @throws NullPointerException if the parameter is null
      */
     public void setJoinBuilder(JoinExpressionBuilder joinBuilder) {
-        if(joinBuilder == null) {
-            throw new NullPointerException(joinBuilder.getClass().getName());
+        if (joinBuilder == null) {
+            throw new NullPointerException("Builder is null");
         }
 
-        this.joinBuilder = joinBuilder;
-        this.joinBuilder.setField(this.field);
+        this._joinBuilder = joinBuilder;
+        this._joinBuilder.setField(this.field);
     }
 
     public void setQueryBuilderRef(IQuerySimpleBuilder querySimpleBuilder) {
-        this.querySimpleBuilderRef = querySimpleBuilder;
+        this._querySimpleBuilderRef = querySimpleBuilder;
     }
     public void clearQueryBuilderRef() {
-        this.querySimpleBuilderRef = null;
+        this._querySimpleBuilderRef = null;
     }
 
     /**
      * Sets the internal JoinExpressionBuilder
-     @param Consumer<JExpressionBuilder> delegate which passes the builder to generate custom expressions
+     @param delegate delegate which passes the builder to generate custom expressions
      @return WExpressionBuilder
      */
     public IQuerySimpleBuilder join(Consumer<IJoinExpressionBuilder> delegate) {
-        delegate.accept(joinBuilder);
+        delegate.accept(_joinBuilder);
 
-        return querySimpleBuilderRef;
+        return _querySimpleBuilderRef;
     }
 
     /**
      * Sets the internal JoinExpressionBuilder
-     @param Consumer<QExpressionBuilder> delegate which passes the builder to generate custom expression
+     @param delegate delegate which passes the builder to generate custom expression
      @return WExpressionBuilder
      */
     public IQuerySimpleBuilder with(Consumer<IQueryExpressionBuilder> delegate) {
-        delegate.accept(expressionBuilder);
+        delegate.accept(_expressionBuilder);
 
-        return querySimpleBuilderRef;
+        return _querySimpleBuilderRef;
     }
 
-    private IQuerySimpleBuilder getQueryBuilderRef() {
-        if(querySimpleBuilderRef == null) {
-            throw new NullPointerException(String.format("% ref is null", IQuerySimpleBuilder.class.getName()));
+    public IQuerySimpleBuilder getQueryBuilderRef() {
+        if (_querySimpleBuilderRef == null) {
+            throw new NullPointerException(String.format("%s ref is null", IQuerySimpleBuilder.class.getName()));
         }
 
-        return querySimpleBuilderRef;
+        return _querySimpleBuilderRef;
+    }
+
+    public StringBuffer getRootBuilder() {
+        return _rootBuilder;
     }
 }

@@ -1,6 +1,6 @@
-package util.tuple;
+package util.models;
 
-import util.GenericValue;
+import java.util.Objects;
 
 public class Tuple<TItemOne, TItemTwo> implements ITuple<TItemOne, TItemTwo> {
     private final TItemOne itemOne;
@@ -32,28 +32,21 @@ public class Tuple<TItemOne, TItemTwo> implements ITuple<TItemOne, TItemTwo> {
     }
 
     public GenericValue getNonNull() {
-        if(itemOne == null && itemTwo != null) {
-            return GenericValue.of(itemTwo);
-        }
-
-        if( itemTwo == null && itemOne != null) {
-            return GenericValue.of(itemOne);
-        }
-
-        if (itemOne == null && itemTwo == null) {
+        if (itemOne == null && itemTwo == null ) {
             return null;
         }
 
-        throw new IllegalArgumentException("Neither item is null");
+        return GenericValue.of(Objects.requireNonNullElse(itemOne, itemTwo));
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public boolean equals(Object o) {
-        if(o == null) {
+        if (o == null) {
             return false;
         }
 
-        if(o.getClass() != this.getClass()) {
+        if (o.getClass() != this.getClass()) {
             return false;
         }
 

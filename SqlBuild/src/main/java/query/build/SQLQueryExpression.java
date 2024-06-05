@@ -1,4 +1,4 @@
-package query;
+package query.build;
 
 
 public enum SQLQueryExpression {
@@ -16,9 +16,10 @@ public enum SQLQueryExpression {
     RIGHTJOIN("RIGHT JOIN"),
     FULLOUTERJOIN("FULL OUTER JOIN"),
     LIKE("LIKE"),
-    IN("IN");
+    IN("IN"),
+    GO("GO;");
 
-    private String key;
+    private final String key;
 
     SQLQueryExpression(String keyword) {
         this.key = keyword;
@@ -26,6 +27,6 @@ public enum SQLQueryExpression {
 
     public String getKeyword() { return key; }
 
-    public <TValue extends Object> String getKeywordWithPostFix(TValue postFix) { return key + postFix.toString(); }
-    public <TValue extends Object> String getKeywordWithPreFix(TValue preFix) { return preFix.toString() + key; }
+    public String getKeywordWithPostFix(String postFix) { return String.format("%s %s", key, postFix); }
+    public String getKeywordWithPreFix(String preFix) { return String.format("%s %s", preFix, key); }
 }

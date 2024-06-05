@@ -1,0 +1,42 @@
+package util.iterator;
+
+import java.util.Arrays;
+import java.util.Objects;
+import java.util.function.BiFunction;
+import java.util.function.Consumer;
+
+public class GenericIterator {
+    public static <TValue> void each(TValue[] values, Consumer<TValue> actionPredicate) {
+        validate(values);
+
+        for (TValue value: values) {
+            actionPredicate.accept(value);
+        }
+    }
+
+    public static <TValue> boolean contains(TValue[] values, BiFunction<TValue, Integer, Boolean> validator) {
+        validate(values);
+
+        for (var i = 0; i < values.length; i++) {
+            if (validator.apply(values[i], i)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private static <TValue> void validate(TValue[] values) {
+        if (values == null) {
+            throw new IllegalArgumentException("Invalid array argument");
+        }
+
+        if (values.length == 0) {
+            return;
+        }
+
+        if (Arrays.stream(values).allMatch(Objects::isNull)) {
+            throw new NullPointerException("Null value in sequence");
+        }
+    }
+}

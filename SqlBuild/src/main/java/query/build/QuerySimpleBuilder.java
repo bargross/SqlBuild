@@ -1,14 +1,15 @@
-package query;
+package query.build;
 
 import query.expression.IQueryFieldExpressionBuilder;
 import query.expression.QueryFieldExpressionBuilder;
-import util.tuple.ITuple;
-import validator.*;
+import util.guard.StringGuard;
+import util.models.ITuple;
 import query.join.*;
 import query.where.*;
-import util.Mapper;
-import util.tuple.Tuple;
+import util.mapper.Mapper;
+import util.models.Tuple;
 
+import java.util.Objects;
 import java.util.function.Consumer;
 
 public class QuerySimpleBuilder implements IQuerySimpleBuilder {
@@ -41,20 +42,15 @@ public class QuerySimpleBuilder implements IQuerySimpleBuilder {
         tableDeclared = false;
     }
 
-    public setBuilder(StringBuffer builder) {
-        this.queryBuilder = builder;
-        this.whereBuilder.set
-    }
-
     /**
      * Sets the internal JoinExpressionBuilder
-     @param QueryFieldExpressionBuilder the expression builder for table fields
+     @value QueryFieldExpressionBuilder the expression builder for table fields
      @return QuerySimpleBuilder
      @throws IllegalArgumentException thrown when no fields provided
      @throws IllegalCallerException thrown when primary function or table is declared
      */
-    public IQuerySimpleBuilder select(Consumer<IQueryFieldExpressionBuilder> predicate) {
-        if(primarySQLFunctionDeclared || tableDeclared) {
+    public IQuerySimpleBuilder select(Consumer<IQueryFieldExpressionBuilder> predicate) throws IllegalArgumentException, IllegalCallerException {
+        if (primarySQLFunctionDeclared || tableDeclared) {
             throw new IllegalCallerException("Primary SQL function declaration not permitted more than once");
         }
 
@@ -81,7 +77,7 @@ public class QuerySimpleBuilder implements IQuerySimpleBuilder {
      @return QuerySimpleBuilder
      @throws IllegalCallerException thrown when primary function or table is declared
      */
-    public IQuerySimpleBuilder selectAll() {
+    public IQuerySimpleBuilder selectAll() throws IllegalCallerException {
         if(primarySQLFunctionDeclared || tableDeclared) {
             throw new IllegalCallerException("Primary SQL function declaration not permitted more than once");
         }
@@ -97,17 +93,17 @@ public class QuerySimpleBuilder implements IQuerySimpleBuilder {
 
     /**
      *
-     @param String table name
+     @value String table name
      @return QuerySimpleBuilder
      @throws IllegalArgumentException thrown when using forbidden words such as SELECT, FROM, etc...
      @throws IllegalCallerException thrown when primary function or table is declared
      */
-    public IQuerySimpleBuilder from(String tableName) {
+    public IQuerySimpleBuilder from(String tableName) throws IllegalArgumentException, IllegalCallerException {
         if(!primarySQLFunctionDeclared || tableDeclared) {
             throw new IllegalCallerException("Columns or table not defined");
         }
 
-        if(StringValidator.isForbiddenKeyword(tableName)) {
+        if(StringGuard.isForbiddenKeyword(tableName)) {
             throw new IllegalArgumentException("Forbidden sql keyword found in sequence");
         }
 
@@ -121,13 +117,13 @@ public class QuerySimpleBuilder implements IQuerySimpleBuilder {
 
     /**
      *
-     @param String field/column
-     @param Consumer<JExpressionBuilder>
+     @value String field/column
+     @value Consumer<JExpressionBuilder>
      @return QuerySimpleBuilder
-     @throws IllegalCallerException
+     @throws  IllegalCallerException description...
      */
-    public IWhereExpressionBuilder where(String field) {
-        if(!primarySQLFunctionDeclared || !tableDeclared) {
+    public IWhereExpressionBuilder where(String field) throws IllegalCallerException {
+        if (!primarySQLFunctionDeclared || !tableDeclared) {
             throw new IllegalCallerException("Columns or table not defined");
         }
 
@@ -142,11 +138,11 @@ public class QuerySimpleBuilder implements IQuerySimpleBuilder {
 
     /**
      *
-     @param Consumer<JExpressionBuilder>
+     @value Consumer<JExpressionBuilder>
      @return QuerySimpleBuilder
-     @throws IllegalCallerException
+     @throws IllegalCallerException description...
      */
-    public IJoinExpressionBuilder join(String table) {
+    public IJoinExpressionBuilder join(String table) throws IllegalCallerException {
         if(!primarySQLFunctionDeclared || !tableDeclared) {
             throw new IllegalCallerException("Columns or table not defined");
         }
@@ -167,10 +163,6 @@ public class QuerySimpleBuilder implements IQuerySimpleBuilder {
     public String toString() {
         clearRefs();
 
-        if(queryBuilder == null || queryBuilder.length() == 0) {
-            return "";
-        }
-
         return queryBuilder.toString();
     }
 
@@ -180,7 +172,6 @@ public class QuerySimpleBuilder implements IQuerySimpleBuilder {
     }
 
     private String[] getFields(Tuple<String, String>[] fields) {
-        return Mapper.filter(Mapper.map(fields, ITuple::getItemTwo),
-                val -> val != null);
+        return Mapper.filter(Mapper.map(fields, ITuple::getItemTwo), Objects::nonNull);
     }
 }
