@@ -1,5 +1,6 @@
 package util.guard.storedProcedureReserved;
 
+import exception.StreamAlreadyConsumedException;
 import util.mapper.Mapper;
 
 import java.util.Arrays;
@@ -62,7 +63,7 @@ public enum RESERVED {
         this.keyword = keyword;
     }
 
-    public static String[] getAllKeywords() {
+    public static String[] getAllKeywords() throws StreamAlreadyConsumedException {
         return Mapper.mapToArray(Mapper.toList(Arrays.stream(RESERVED.values())), x -> x.keyword);
     }
 

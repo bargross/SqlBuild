@@ -16,7 +16,8 @@ public enum SQLQueryExpression {
     RIGHTJOIN("RIGHT JOIN"),
     FULLOUTERJOIN("FULL OUTER JOIN"),
     LIKE("LIKE"),
-    IN("IN");
+    IN("IN"),
+    GO("GO;");
 
     private final String key;
 
@@ -26,6 +27,6 @@ public enum SQLQueryExpression {
 
     public String getKeyword() { return key; }
 
-    public <TValue> String getKeywordWithPostFix(TValue postFix) { return key + postFix.toString(); }
-    public <TValue> String getKeywordWithPreFix(TValue preFix) { return preFix.toString() + key; }
+    public String getKeywordWithPostFix(String postFix) { return String.format("%s %s", key, postFix); }
+    public String getKeywordWithPreFix(String preFix) { return String.format("%s %s", preFix, key); }
 }

@@ -7,6 +7,7 @@ import java.util.List;
 
 public interface IQueryFieldExpressionBuilder {
     IQueryFieldExpressionBuilder set(String field, SQLFunction sqlFunc);
+    @SuppressWarnings("return")
     IQueryFieldExpressionBuilder setMany(List<FieldDefinition> fields);
     IQueryFieldExpressionBuilder setMany(FieldDefinition[] fields);
 }

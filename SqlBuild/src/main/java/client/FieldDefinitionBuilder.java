@@ -17,10 +17,14 @@ public class FieldDefinitionBuilder implements IFieldDefinitionBuilder {
     }
 
     public FieldDefinitionBuilder setField(String field) {
-        return setField(field, SQLFunction.NOOP);
+        return setColumnField(field, SQLFunction.NOOP);
     }
 
-    public FieldDefinitionBuilder setField(String field, SQLFunction function) {
+    public  FieldDefinitionBuilder setField(String field, SQLFunction function) {
+        return setColumnField(field, function);
+    }
+
+    private FieldDefinitionBuilder setColumnField(String field, SQLFunction function) {
         if (StringGuard.isEmptyOrWhiteSpace(field)) {
             throw new IllegalArgumentException("");
         }

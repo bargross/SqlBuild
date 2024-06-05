@@ -42,11 +42,11 @@ public class Tuple<TItemOne, TItemTwo> implements ITuple<TItemOne, TItemTwo> {
     @Override
     @SuppressWarnings("unchecked")
     public boolean equals(Object o) {
-        if(o == null) {
+        if (o == null) {
             return false;
         }
 
-        if(o.getClass() != this.getClass()) {
+        if (o.getClass() != this.getClass()) {
             return false;
         }
 

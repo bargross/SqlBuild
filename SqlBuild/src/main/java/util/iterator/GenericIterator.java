@@ -9,7 +9,7 @@ public class GenericIterator {
     public static <TValue> void each(TValue[] values, Consumer<TValue> actionPredicate) {
         validate(values);
 
-        for(TValue value: values) {
+        for (TValue value: values) {
             actionPredicate.accept(value);
         }
     }
@@ -17,7 +17,7 @@ public class GenericIterator {
     public static <TValue> boolean contains(TValue[] values, BiFunction<TValue, Integer, Boolean> validator) {
         validate(values);
 
-        for(var i = 0; i < values.length; i++) {
+        for (var i = 0; i < values.length; i++) {
             if (validator.apply(values[i], i)) {
                 return true;
             }

@@ -31,4 +31,18 @@ public class GenericValue implements IGenericValue {
 
         return genericValue;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null) {
+            return false;
+        }
+
+        if (o.getClass() != this.getClass()) {
+            return false;
+        }
+
+        var other  = (GenericValue) o;
+        return value == other.value;
+    }
 }

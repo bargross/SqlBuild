@@ -1,5 +1,6 @@
 package util.guard;
 
+import exception.StreamAlreadyConsumedException;
 import util.search.ArrayGenericValueFinder;
 import util.guard.queryReserved.RESERVED;
 
@@ -23,8 +24,13 @@ public final class ReservedKeywordGuard {
         return Arrays
             .stream(values)
             .anyMatch(fieldValue -> {
-                var wordIsReserved = ArrayGenericValueFinder.contains(RESERVED.Keywords, fieldValue.toUpperCase())
-                        && ArrayGenericValueFinder.contains(util.guard.storedProcedureReserved.RESERVED.getAllKeywords(), fieldValue.toUpperCase());
+                boolean wordIsReserved;
+                try {
+                    wordIsReserved = ArrayGenericValueFinder.contains(RESERVED.Keywords, fieldValue.toUpperCase())
+                            && ArrayGenericValueFinder.contains(util.guard.storedProcedureReserved.RESERVED.getAllKeywords(), fieldValue.toUpperCase());
+                } catch (StreamAlreadyConsumedException e) {
+                    throw new RuntimeException(e);
+                }
 
                 return excludeWords ? wordIsReserved && !ArrayGenericValueFinder.contains(exclude, fieldValue) : wordIsReserved;
             });

@@ -17,10 +17,12 @@ public class QueryExtendedBuilder extends QuerySimpleBuilder implements IQueryEx
 
     /**
      *
-     @param String table name
+     @value String table name
      @return QuerySimpleBuilder
+     @throws IllegalCallerException description...
+     @throws IllegalArgumentException description...
      */
-    public IQuerySimpleBuilder selectDistinct(Consumer<IQueryFieldExpressionBuilder> fieldBuilderPredicate) {
+    public IQuerySimpleBuilder selectDistinct(Consumer<IQueryFieldExpressionBuilder> fieldBuilderPredicate) throws IllegalCallerException, IllegalArgumentException {
 
         if(primarySQLFunctionDeclared) {
             throw new IllegalCallerException("Primary SQL function declaration not permitted more than once");
@@ -48,10 +50,11 @@ public class QueryExtendedBuilder extends QuerySimpleBuilder implements IQueryEx
 
     /**
      *
-     @param String table name
+     @value String table name
      @return QuerySimpleBuilder
+     @throws IllegalCallerException description...
      */
-    public IQuerySimpleBuilder selectAllDistinct() {
+    public IQuerySimpleBuilder selectAllDistinct() throws IllegalCallerException {
         if(primarySQLFunctionDeclared) {
             throw new IllegalCallerException("Primary SQL function declaration not permitted more than once");
         }
@@ -67,10 +70,12 @@ public class QueryExtendedBuilder extends QuerySimpleBuilder implements IQueryEx
 
     /**
      *
-     @param String table name
+     @value String table name
      @return QuerySimpleBuilder
+     @throws IllegalCallerException description...
+     @throws IllegalArgumentException description...
      */
-    public IQuerySimpleBuilder selectTop(Integer maxRows, Consumer<IQueryFieldExpressionBuilder> fieldBuilderPredicate) {
+    public IQuerySimpleBuilder selectTop(Integer maxRows, Consumer<IQueryFieldExpressionBuilder> fieldBuilderPredicate) throws IllegalCallerException, IllegalArgumentException {
 
         if(primarySQLFunctionDeclared) {
             throw new IllegalCallerException("Primary SQL function declaration not permitted more than once");
@@ -91,7 +96,7 @@ public class QueryExtendedBuilder extends QuerySimpleBuilder implements IQueryEx
         });
 
         var columns = String.join(",", fields);
-        var expression = String.format("%s %s", SQLQueryExpression.SELECTTOP.getKeywordWithPostFix(maxRows), columns);
+        var expression = String.format("%s %s", SQLQueryExpression.SELECTTOP.getKeywordWithPostFix(maxRows.toString()), columns);
 
         queryBuilder.append(expression);
 
@@ -102,15 +107,16 @@ public class QueryExtendedBuilder extends QuerySimpleBuilder implements IQueryEx
 
     /**
      *
-     @param String table name
+     @value String table name
      @return QuerySimpleBuilder
+     @throws IllegalCallerException description...
      */
-    public IQuerySimpleBuilder selectAllTop(Integer maxRows) {
-        if(primarySQLFunctionDeclared) {
+    public IQuerySimpleBuilder selectAllTop(Integer maxRows) throws IllegalCallerException {
+        if (primarySQLFunctionDeclared) {
             throw new IllegalCallerException("Primary SQL function declaration not permitted more than once");
         }
 
-        var expression = String.format("%s %s", SQLQueryExpression.SELECTTOP.getKeywordWithPostFix(maxRows), "*");
+        var expression = String.format("%s %s", SQLQueryExpression.SELECTTOP.getKeywordWithPostFix(maxRows.toString()), "*");
 
         this.queryBuilder.append(expression);
 

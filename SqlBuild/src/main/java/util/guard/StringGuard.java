@@ -22,11 +22,11 @@ public final class StringGuard {
     }
 
     private static void defaultValidation(String value, boolean lookupSpaces) {
-        if(lookupSpaces && hasSpaces(value)) {
+        if (lookupSpaces && hasSpaces(value)) {
             throw new IllegalArgumentException("Value cannot have spaces, it must be 1 word");
         }
 
-        if(isEmptyOrWhiteSpace(value)) {
+        if (isEmptyOrWhiteSpace(value)) {
             throw new IllegalArgumentException("Value cannot be null, empty or white space");
         }
     }

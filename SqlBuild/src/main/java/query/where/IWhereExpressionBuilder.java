@@ -8,4 +8,6 @@ import java.util.function.Consumer;
 public interface IWhereExpressionBuilder {
     IQuerySimpleBuilder join(Consumer<IJoinExpressionBuilder> delegate);
     IQuerySimpleBuilder with(Consumer<IQueryExpressionBuilder> delegate);
+    IQuerySimpleBuilder getQueryBuilderRef();
+
 }

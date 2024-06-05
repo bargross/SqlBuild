@@ -22,11 +22,11 @@ public class GenericComparator<TValue> {
     }
 
     private boolean is(ComparatorOperators operator, TValue value, TValue valueToCompareTo) {
-        if(value == null) {
+        if (value == null) {
             throw new IllegalArgumentException("Invalid value");
         }
 
-        if(valueToCompareTo == null) {
+        if (valueToCompareTo == null) {
             throw new IllegalArgumentException("Invalid value to compare to");
         }
 

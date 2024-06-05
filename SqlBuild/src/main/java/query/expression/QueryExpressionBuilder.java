@@ -31,7 +31,7 @@ public class QueryExpressionBuilder implements IQueryExpressionBuilder {
 
     /**
      *
-     @param String field/column
+     @param field field/column
      @return void
      */
     public void setField(String field) {
@@ -44,7 +44,7 @@ public class QueryExpressionBuilder implements IQueryExpressionBuilder {
 
     /**
      *
-     @param StringBuffer builder
+     @param builder string buffer
      @return void
      */
     public void setBuilder(StringBuffer builder) {
@@ -57,9 +57,8 @@ public class QueryExpressionBuilder implements IQueryExpressionBuilder {
 
     /**
      *
-     @param String fieldValue
+     @param fieldValue column value
      @return String
-     @throws IllegalArgumentException
      */
     public String equals(String fieldValue) {
         defaultValidation(fieldValue);
@@ -69,9 +68,8 @@ public class QueryExpressionBuilder implements IQueryExpressionBuilder {
 
     /**
      *
-     @param String fieldValue
-     @return void
-     @throws NullPointerException
+     @param fieldValue column value
+     @throws NullPointerException description...
      */
     public void isEquals(String fieldValue) {
         var expression = equals(fieldValue);
@@ -85,9 +83,9 @@ public class QueryExpressionBuilder implements IQueryExpressionBuilder {
 
     /**
      *
-     @param String fieldValue
-     @return String
-     @throws IllegalArgumentException
+     @param fieldValue field name
+     @return string value containing LIKE query expression
+     @throws IllegalArgumentException description
      */
     public String like(String fieldValue) {
         defaultValidation(fieldValue);
@@ -97,11 +95,10 @@ public class QueryExpressionBuilder implements IQueryExpressionBuilder {
 
     /**
      *
-     @param String fieldValue
-     @return void
-     @throws NullPointerException
+     @param fieldValue fieldValue
+     @throws NullPointerException description...
      */
-    public void isLike(String fieldValue) {
+    public void isLike(String fieldValue) throws NullPointerException {
         var expression = like(fieldValue);
 
         if (builder == null) {
@@ -113,8 +110,8 @@ public class QueryExpressionBuilder implements IQueryExpressionBuilder {
 
     /**
      *
-     @param String[] fieldValues
-     @return String
+     @param fieldValues column names
+     @return string containing IN SQL query expression
      */
     public String in(String... fieldValues) {
         if (ReservedKeywordGuard.hasReservedKeywords(fieldValues)) {
@@ -126,8 +123,8 @@ public class QueryExpressionBuilder implements IQueryExpressionBuilder {
 
     /**
      *
-     @param String[] fieldValues
-     @return void
+     @param fieldValues column names
+     @throws NullPointerException description...
      */
     public void isIn(String... fieldValues)  {
 

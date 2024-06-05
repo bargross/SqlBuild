@@ -1,5 +1,6 @@
 package util.mapper;
 
+import exception.StreamAlreadyConsumedException;
 import util.guard.StreamGuard;
 
 import java.util.ArrayList;
@@ -9,6 +10,8 @@ import java.util.function.Function;
 import java.util.stream.Stream;
 
 public class Mapper {
+
+    @SuppressWarnings("unchecked")
     public static <TValue, TResult> TResult[] map(TValue[] values, Function<TValue, TResult> predicate) {
         var container = (TResult[]) new Object[values.length];
 
@@ -24,7 +27,7 @@ public class Mapper {
     public static <TValue, TResult> List<TResult> map(List<TValue> values, Function<TValue, TResult> predicate) {
         var container = new ArrayList<TResult>(values.size());
 
-        for(var value: values) {
+        for (var value: values) {
             var mappedValue = predicate.apply(value);
 
             container.add(mappedValue);
@@ -60,7 +63,8 @@ public class Mapper {
         return container;
     }
 
-    public static <TValue> List<TValue> toList(Stream<TValue> stream) {
+    public static <TValue> List<TValue> toList(Stream<TValue> stream)
+            throws NullPointerException, IllegalArgumentException, StreamAlreadyConsumedException {
         if (stream == null) {
             throw new NullPointerException("Stream is null");
         }
@@ -72,16 +76,20 @@ public class Mapper {
 
         var container = new ArrayList<TValue>(length);
 
-        var newStream = StreamGuard.isConsumed(stream);
+        var assuranceContainer = StreamGuard.isConsumed(stream);
 
-        newStream.ifPresent(x -> x.forEachOrdered(container::add));
+        assuranceContainer.ifPresent(stm -> stm.forEachOrdered(container::add));
+
+        if (container.isEmpty()) {
+            throw new StreamAlreadyConsumedException("Stream has already been consumed.");
+        }
 
         return container;
     }
 
     public static char[] toCharArray(String value) {
         var length = value.length();
-        char[] characters = new char[value.length()];
+        var characters = new char[value.length()];
 
         for (int i = 0; i < length; ++i) {
             characters[i] = value.charAt(i);
@@ -92,7 +100,7 @@ public class Mapper {
 
     public static Character[] toCharacterArray(String value) {
         var length = value.length();
-        Character[] characters = new Character[value.length()];
+        var characters = new Character[value.length()];
 
         for (int i = 0; i < length; ++i) {
             characters[i] = value.charAt(i);
