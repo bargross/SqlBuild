@@ -34,7 +34,7 @@ public class StoredProcedureBuilder implements IStoredProcedureBuilder {
 
         var procedure = RESERVED.CREATE.getKeywordWithPrefixAndSuffix(RESERVED.PROCEDURE, name, RESERVED.AS);
 
-        this.builder.append(name);
+        this.builder.append(procedure);
 
         return this;
     }
