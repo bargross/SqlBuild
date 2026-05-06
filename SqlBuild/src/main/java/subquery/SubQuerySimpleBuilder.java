@@ -1,0 +1,30 @@
+package subquery;
+
+import exception.EmptyQueryException;
+import query.build.simpleQuery.QuerySimpleBuilder;
+import query.parametizedQuery.ParameterizedQuery;
+import util.guard.StringGuard;
+
+public class SubQuerySimpleBuilder extends QuerySimpleBuilder implements ISubQuerySimpleBuilder {
+    public SubQuerySimpleBuilder() {
+        super();
+    }
+
+    public ParameterizedQuery as(String fieldName) throws EmptyQueryException {
+        if (StringGuard.isEmptyOrWhiteSpace(fieldName)) {
+            throw new IllegalArgumentException("fieldName cannot be empty, null or white space.");
+        }
+
+        if (StringGuard.isForbiddenKeyword(fieldName)) {
+            throw new IllegalArgumentException(String.format("%s has reserved SQL keywords.", fieldName));
+        }
+
+        if (queryBuilder.compareTo(new StringBuffer("( ")) == 0) {
+            throw new EmptyQueryException();
+        }
+
+        queryBuilder.append(String.format(" ) AS %s", fieldName));
+
+        return new ParameterizedQuery(queryBuilder);
+    }
+}

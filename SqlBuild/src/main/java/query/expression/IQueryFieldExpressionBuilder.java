@@ -6,8 +6,9 @@ import client.models.FieldDefinition;
 import java.util.List;
 
 public interface IQueryFieldExpressionBuilder {
-    IQueryFieldExpressionBuilder set(String field, SQLFunction sqlFunc);
+    IQueryFieldExpressionBuilder setColumn(String field, SQLFunction sqlFunc);
+    IQueryFieldExpressionBuilder setColumn(String field);
     @SuppressWarnings("return")
-    IQueryFieldExpressionBuilder setMany(List<FieldDefinition> fields);
-    IQueryFieldExpressionBuilder setMany(FieldDefinition[] fields);
+    IQueryFieldExpressionBuilder setColumns(List<FieldDefinition> fields);
+    IQueryFieldExpressionBuilder setColumns(FieldDefinition[] fields);
 }

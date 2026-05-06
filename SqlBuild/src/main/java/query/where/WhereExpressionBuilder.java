@@ -1,6 +1,6 @@
 package query.where;
 
-import query.build.IQuerySimpleBuilder;
+import query.build.simpleQuery.IQuerySimpleBuilder;
 import util.guard.StringGuard;
 import query.expression.IQueryExpressionBuilder;
 import query.expression.QueryExpressionBuilder;

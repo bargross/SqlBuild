@@ -1,10 +1,11 @@
 package procedure;
 
-import query.build.IQueryExtendedBuilder;
+import procedure.queryextended.QueryComplexBuilderExtended;
+import query.build.queryComplex.IQueryComplexBuilder;
 
 import java.util.function.Consumer;
 
 public interface IStoredProcedureBuilder {
     IStoredProcedureBuilder createProcedure(String name);
-    IStoredProcedureBuilder go(Consumer<IQueryExtendedBuilder> builder);
+    IStoredProcedureBuilder go(Consumer<QueryComplexBuilderExtended> builder);
 }

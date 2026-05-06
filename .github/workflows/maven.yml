@@ -1,0 +1,45 @@
+name: Java CI
+
+on:
+  push:
+    branches: [ "main", "master" ]
+
+  pull_request:
+    branches: [ "main", "master" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        java-version: [17, 21, 25]
+      fail-fast: false
+
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up JDK ${{ matrix.java-version }}
+      uses: actions/setup-java@v4
+      with:
+        java-version: ${{ matrix.java-version }}
+        distribution: 'temurin'
+    
+    - name: Build with Maven
+      run: mvn clean compile
+      working-directory: ./SqlBuild
+      
+    - name: Run tests (always)
+      run: mvn test
+      working-directory: ./SqlBuild
+    
+    - name: Build package (only on master/main push)
+      if: github.event_name == 'push' && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main')
+      run: mvn clean package -DskipTests
+      working-directory: ./SqlBuild
+    
+    - name: Upload package
+      if: github.event_name == 'push' && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main')
+      uses: actions/upload-artifact@v4
+      with:
+        name: sqlbuild-package
+        path: ./SqlBuild/target/*.jar

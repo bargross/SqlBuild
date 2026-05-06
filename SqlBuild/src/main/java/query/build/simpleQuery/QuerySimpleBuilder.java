@@ -1,7 +1,11 @@
-package query.build;
+package query.build.simpleQuery;
 
+import exception.EmptyQueryException;
+import query.build.SQLQueryExpression;
 import query.expression.IQueryFieldExpressionBuilder;
 import query.expression.QueryFieldExpressionBuilder;
+import query.parametizedQuery.IParameterizedQuery;
+import query.parametizedQuery.ParameterizedQuery;
 import util.guard.StringGuard;
 import util.models.ITuple;
 import query.join.*;
@@ -13,7 +17,7 @@ import java.util.Objects;
 import java.util.function.Consumer;
 
 public class QuerySimpleBuilder implements IQuerySimpleBuilder {
-    protected final StringBuffer queryBuilder;
+    protected StringBuffer queryBuilder;
     protected final WhereExpressionBuilder whereBuilder;
     protected final JoinExpressionBuilder joinBuilder;
     protected final QueryFieldExpressionBuilder fieldBuilder;
@@ -32,15 +36,16 @@ public class QuerySimpleBuilder implements IQuerySimpleBuilder {
         tableDeclared = false;
     }
 
-    public QuerySimpleBuilder(StringBuffer queryBuilder) {
-        this.queryBuilder = queryBuilder;
-        whereBuilder = new WhereExpressionBuilder(queryBuilder);
-        joinBuilder = new JoinExpressionBuilder(queryBuilder);
-        fieldBuilder = new QueryFieldExpressionBuilder();
-
-        primarySQLFunctionDeclared = false;
-        tableDeclared = false;
-    }
+    // TODO: think about this constructors usage as it can mess with the query building process, might allow query to be build internally only.
+//    public QuerySimpleBuilder(StringBuffer builder) {
+//        queryBuilder = builder;
+//        whereBuilder = new WhereExpressionBuilder(queryBuilder);
+//        joinBuilder = new JoinExpressionBuilder(queryBuilder);
+//        fieldBuilder = new QueryFieldExpressionBuilder();
+//
+//        primarySQLFunctionDeclared = false;
+//        tableDeclared = false;
+//    }
 
     /**
      * Sets the internal JoinExpressionBuilder
@@ -159,11 +164,10 @@ public class QuerySimpleBuilder implements IQuerySimpleBuilder {
      @return String
      @throws NullPointerException if the internal builder is not set
      */
-    @Override
-    public String toString() {
+    public IParameterizedQuery build() throws EmptyQueryException {
         clearRefs();
 
-        return queryBuilder.toString();
+        return new ParameterizedQuery(queryBuilder);
     }
 
     private void clearRefs() {
