@@ -39,7 +39,7 @@ jobs:
     
     - name: Upload package
       if: github.event_name == 'push' && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main')
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: sqlbuild-package
         path: ./SqlBuild/target/*.jar
