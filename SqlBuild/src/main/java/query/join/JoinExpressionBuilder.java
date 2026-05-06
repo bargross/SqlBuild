@@ -51,12 +51,12 @@ public class JoinExpressionBuilder implements IJoinExpressionBuilder {
      @param field table name
      @throws IllegalArgumentException invalid field
      */
-    public void setField(String field) {
+    public void setColumn(String field) {
         if(StringGuard.isEmptyOrWhiteSpace(field)) {
            throw new IllegalArgumentException("Invalid field");
         }
 
-        expressionBuilder.setField(field);
+        expressionBuilder.setColumn(field);
     }
 
     public void setQueryBuilderRef(IQuerySimpleBuilder querySimpleBuilder) {

@@ -11,4 +11,5 @@ public interface IQueryExpressionBuilder {
     IQueryExpressionBuilder in(String... fieldValues);
     IQueryExpressionBuilder isIn(String... fieldValues);
     IQueryExpressionBuilder or(Consumer<IQueryExpressionBuilder> queryExpansionDelegate);
+    void setColumn(String column);
 }

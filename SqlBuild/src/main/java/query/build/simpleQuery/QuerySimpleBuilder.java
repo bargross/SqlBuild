@@ -124,7 +124,7 @@ public class QuerySimpleBuilder implements IQuerySimpleBuilder {
      *
      @value String field/column
      @value Consumer<JExpressionBuilder>
-     @return QuerySimpleBuilder
+     @return IWhereExpressionBuilder
      @throws  IllegalCallerException description...
      */
     public IWhereExpressionBuilder where(String field) throws IllegalCallerException {
@@ -152,7 +152,7 @@ public class QuerySimpleBuilder implements IQuerySimpleBuilder {
             throw new IllegalCallerException("Columns or table not defined");
         }
 
-        joinBuilder.setField(table);
+        joinBuilder.setColumn(table);
 
         joinBuilder.setQueryBuilderRef(this);
 

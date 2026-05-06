@@ -67,22 +67,22 @@ public class WhereExpressionBuilder implements IWhereExpressionBuilder {
 
     /**
      * Sets the field/property/column we're querying
-     @param field the column within sql the table
+     @param column the column within sql the table
      @throws IllegalArgumentException if the field is empty or if is a forbidden sql keyword
      */
-    public void setField(String field) {
-        if (StringGuard.isEmptyOrWhiteSpace(field)) {
+    public void setField(String column) {
+        if (StringGuard.isEmptyOrWhiteSpace(column)) {
             throw new IllegalArgumentException("Invalid field");
         }
 
-        if (StringGuard.isForbiddenKeyword(field)) {
+        if (StringGuard.isForbiddenKeyword(column)) {
             throw new IllegalArgumentException("Forbidden field name");
         }
 
-        this._expressionBuilder.setField(field);
-        this._joinBuilder.setField(field);
+        this._expressionBuilder.setColumn(column);
+        this._joinBuilder.setColumn(column);
 
-        this.field = field;
+        this.field = column;
     }
 
     /**
@@ -96,7 +96,7 @@ public class WhereExpressionBuilder implements IWhereExpressionBuilder {
         }
 
         this._joinBuilder = joinBuilder;
-        this._joinBuilder.setField(this.field);
+        this._joinBuilder.setColumn(this.field);
     }
 
     public void setQueryBuilderRef(IQuerySimpleBuilder querySimpleBuilder) {

@@ -6,8 +6,13 @@ import query.parametizedQuery.ParameterizedQuery;
 import util.guard.StringGuard;
 
 public class SubQuerySimpleBuilder extends QuerySimpleBuilder implements ISubQuerySimpleBuilder {
+    private final String fieldQueryStart;
+
+
     public SubQuerySimpleBuilder() {
         super();
+
+        fieldQueryStart = "( ";
     }
 
     public ParameterizedQuery as(String fieldName) throws EmptyQueryException {
@@ -19,7 +24,7 @@ public class SubQuerySimpleBuilder extends QuerySimpleBuilder implements ISubQue
             throw new IllegalArgumentException(String.format("%s has reserved SQL keywords.", fieldName));
         }
 
-        if (queryBuilder.compareTo(new StringBuffer("( ")) == 0) {
+        if (queryBuilder.compareTo(new StringBuffer(fieldQueryStart)) == 0) {
             throw new EmptyQueryException();
         }
 
