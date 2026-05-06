@@ -19,15 +19,15 @@ public class FieldDefinitionBuilder implements IFieldDefinitionBuilder {
         fieldsInstantiated = false;
     }
 
-    public IFieldDefinitionBuilder setField(String field) {
+    public IFieldDefinitionBuilder setColumn(String field) {
         return setColumnField(field, SQLFunction.NOOP);
     }
 
-    public  IFieldDefinitionBuilder setField(String field, SQLFunction function) {
+    public  IFieldDefinitionBuilder setColumn(String field, SQLFunction function) {
         return setColumnField(field, function);
     }
 
-    public IFieldDefinitionBuilder setFieldAsQuery(Consumer<SubQuerySimpleBuilder> subQueryBuilder, String asFieldName) throws EmptyQueryException {
+    public IFieldDefinitionBuilder setColumnAsQuery(Consumer<SubQuerySimpleBuilder> subQueryBuilder, String asFieldName) throws EmptyQueryException {
         var queryBuilder = new SubQuerySimpleBuilder();
 
         if (subQueryBuilder == null) {

@@ -8,13 +8,13 @@ public class Program {
     public void Main(String[] args) throws EmptyQueryException {
 
         var fields = new FieldDefinitionBuilder()
-            .setField("b", SQLFunction.MAX)
-                .setFieldAsQuery(builder ->
+            .setColumn("b", SQLFunction.MAX)
+                .setColumnAsQuery(builder ->
                         builder.select(columnBuilder ->
                                 columnBuilder.setColumn("column1", SQLFunction.AVG))
                                 .from("table-c"), "avgColumn")
-            .setField("c")
-            .setField("n")
+            .setColumn("c")
+            .setColumn("n")
             .toList();
 
         var parameterizedQuery = new QuerySimpleBuilder()
