@@ -53,11 +53,11 @@ public class FieldDefinitionBuilder implements IFieldDefinitionBuilder {
         }
 
         if (StringGuard.isForbiddenKeyword(column)) {
-            throw new IllegalArgumentException("Column name has forbidden SQL keyword.");
+            throw new IllegalArgumentException("Column name contains forbidden SQL keyword/s.");
         }
 
         if (function == null) {
-            throw new NullPointerException("Function not provided.");
+            throw new NullPointerException("SQL Function not provided.");
         }
 
         if (!fieldsInstantiated) {
