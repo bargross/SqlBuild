@@ -11,29 +11,49 @@ import java.util.List;
 import java.util.Objects;
 
 public class QueryFieldExpressionBuilder implements IQueryFieldExpressionBuilder {
-    private final List<FieldDefinition> fields;
+    private final List<FieldDefinition> columns;
 
     public QueryFieldExpressionBuilder() {
-        fields = new ArrayList<>();
+        columns = new ArrayList<>();
     }
 
-    public IQueryFieldExpressionBuilder set(String field, SQLFunction sqlFunc) {
-        var fieldDefinition = setField(field, sqlFunc);
+    /**
+     *
+     * @param column field definition
+     * @return IQueryFieldExpressionBuilder
+     * @throws IllegalArgumentException description...
+     */
+    public IQueryFieldExpressionBuilder setColumn(String column, SQLFunction sqlFunc) {
+        var fieldDefinition = setTableColumn(column, sqlFunc);
 
-        fields.add(fieldDefinition);
+        columns.add(fieldDefinition);
 
         return this;
     }
 
     /**
      *
-     * @param fields field definition
+     * @param column field definition
      * @return IQueryFieldExpressionBuilder
      * @throws IllegalArgumentException description...
      */
-    public IQueryFieldExpressionBuilder setMany(FieldDefinition[] fields) throws IllegalArgumentException{
+    public IQueryFieldExpressionBuilder setColumn(String column) {
+        var fieldDefinition = setTableColumn(column, SQLFunction.NOOP);
 
-        Arrays.stream(fields).forEach(fieldDefinition -> {
+        columns.add(fieldDefinition);
+
+        return this;
+    }
+
+    /**
+     *
+     * @param tableColumns field definition
+     * @return IQueryFieldExpressionBuilder
+     * @throws IllegalArgumentException description...
+     */
+    public IQueryFieldExpressionBuilder setColumns(FieldDefinition[] tableColumns) throws IllegalArgumentException{
+
+        Arrays.stream(tableColumns).forEach(fieldDefinition -> {
             var field = fieldDefinition.getField();
             if(StringGuard.isEmptyOrWhiteSpace(field)) {
                 throw new IllegalArgumentException("Invalid field");
@@ -45,13 +65,13 @@ public class QueryFieldExpressionBuilder implements IQueryFieldExpressionBuilder
             }
         });
 
-        this.fields.addAll(Mapper.toList(fields));
+        columns.addAll(Mapper.toList(tableColumns));
 
         return this;
     }
 
-    public IQueryFieldExpressionBuilder setMany(List<FieldDefinition> fields) {
-        fields.forEach(fieldDefinition -> {
+    public IQueryFieldExpressionBuilder setColumns(List<FieldDefinition> tableColumns) {
+        tableColumns.forEach(fieldDefinition -> {
             var field = fieldDefinition.getField();
             if(StringGuard.isEmptyOrWhiteSpace(field)) {
                 throw new IllegalArgumentException("Invalid field");
@@ -63,17 +83,17 @@ public class QueryFieldExpressionBuilder implements IQueryFieldExpressionBuilder
             }
         });
 
-        this.fields.addAll(fields);
+        columns.addAll(tableColumns);
 
         return this;
     }
 
-    private FieldDefinition setField(String field, SQLFunction sqlFunc) {
-        if(StringGuard.isEmptyOrWhiteSpace(field)) {
+    private FieldDefinition setTableColumn(String column, SQLFunction sqlFunc) {
+        if(StringGuard.isEmptyOrWhiteSpace(column)) {
             throw new IllegalArgumentException("Field cannot be null or empty");
         }
 
-        if(StringGuard.isForbiddenKeyword(field)) {
+        if(StringGuard.isForbiddenKeyword(column)) {
             throw new IllegalArgumentException("Field cannot be or contain a reserved sql keyword");
         }
 
@@ -81,13 +101,13 @@ public class QueryFieldExpressionBuilder implements IQueryFieldExpressionBuilder
             throw new NullPointerException("Invalid function selected");
         }
 
-        return new FieldDefinition(field, sqlFunc);
+        return new FieldDefinition(column, sqlFunc);
     }
 
     public Tuple<String, String>[] getFields() {
-        var mappedModels = mapClientModelsToTuples(fields);
+        var mappedModels = mapClientModelsToTuples(columns);
 
-        fields.clear();
+        columns.clear();
 
         return mappedModels;
     }

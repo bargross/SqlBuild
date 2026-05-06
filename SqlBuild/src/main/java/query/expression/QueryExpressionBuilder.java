@@ -3,10 +3,13 @@ package query.expression;
 import util.guard.ReservedKeywordGuard;
 import util.guard.StringGuard;
 
+import java.util.function.Consumer;
+
 public class QueryExpressionBuilder implements IQueryExpressionBuilder {
 
     private String fieldName;
     private StringBuffer builder;
+    private boolean isSubQuery;
 
     public QueryExpressionBuilder(StringBuffer builder) {
         this(null, builder, false);
@@ -18,15 +21,21 @@ public class QueryExpressionBuilder implements IQueryExpressionBuilder {
 
     private QueryExpressionBuilder(String fieldName, StringBuffer builder, boolean validateField) {
 
-        if(validateField) {
+        if (validateField) {
             defaultValidation(fieldName);
         }
 
-        if(builder == null) {
+        if (builder == null) {
             throw new NullPointerException("Buffer missing");
         }
 
         this.builder = builder;
+    }
+
+    public QueryExpressionBuilder() {
+        builder = new StringBuffer("( ");
+
+        isSubQuery = true;
     }
 
     /**
@@ -58,12 +67,14 @@ public class QueryExpressionBuilder implements IQueryExpressionBuilder {
     /**
      *
      @param fieldValue column value
-     @return String
+     @return void
      */
-    public String equals(String fieldValue) {
+    public IQueryExpressionBuilder equals(String fieldValue) {
         defaultValidation(fieldValue);
 
-        return String.format("%s = %s%s", fieldName, fieldValue, System.lineSeparator());
+        this.builder.append(String.format("%s = %s%s", fieldName, fieldValue, System.lineSeparator()));
+
+        return this;
     }
 
     /**
@@ -71,7 +82,7 @@ public class QueryExpressionBuilder implements IQueryExpressionBuilder {
      @param fieldValue column value
      @throws NullPointerException description...
      */
-    public void isEquals(String fieldValue) {
+    public IQueryExpressionBuilder isEquals(String fieldValue) {
         var expression = equals(fieldValue);
 
         if(builder == null) {
@@ -79,6 +90,8 @@ public class QueryExpressionBuilder implements IQueryExpressionBuilder {
         }
 
         this.builder.append(expression);
+
+        return this;
     }
 
     /**
@@ -87,10 +100,14 @@ public class QueryExpressionBuilder implements IQueryExpressionBuilder {
      @return string value containing LIKE query expression
      @throws IllegalArgumentException description
      */
-    public String like(String fieldValue) {
+    public IQueryExpressionBuilder like(String fieldValue) {
         defaultValidation(fieldValue);
 
-        return String.format("%s LIKE %s%s", fieldName, fieldValue, System.lineSeparator());
+        var expression = String.format("%s LIKE %s%s", fieldName, fieldValue, System.lineSeparator());
+
+        this.builder.append(expression);
+
+        return this;
     }
 
     /**
@@ -98,7 +115,7 @@ public class QueryExpressionBuilder implements IQueryExpressionBuilder {
      @param fieldValue fieldValue
      @throws NullPointerException description...
      */
-    public void isLike(String fieldValue) throws NullPointerException {
+    public IQueryExpressionBuilder isLike(String fieldValue) throws NullPointerException {
         var expression = like(fieldValue);
 
         if (builder == null) {
@@ -106,6 +123,8 @@ public class QueryExpressionBuilder implements IQueryExpressionBuilder {
         }
 
         this.builder.append(expression);
+
+        return this;
     }
 
     /**
@@ -113,12 +132,16 @@ public class QueryExpressionBuilder implements IQueryExpressionBuilder {
      @param fieldValues column names
      @return string containing IN SQL query expression
      */
-    public String in(String... fieldValues) {
+    public IQueryExpressionBuilder in(String... fieldValues) {
         if (ReservedKeywordGuard.hasReservedKeywords(fieldValues)) {
             throw new IllegalArgumentException("Forbidden word found in sequence");
         }
 
-        return String.format("%s IN (%s)%s", fieldName, String.join(",", fieldValues), System.lineSeparator());
+        var expression = String.format("%s IN (%s)%s", fieldName, String.join(",", fieldValues), System.lineSeparator());
+
+        this.builder.append(expression);
+
+        return this;
     }
 
     /**
@@ -126,7 +149,7 @@ public class QueryExpressionBuilder implements IQueryExpressionBuilder {
      @param fieldValues column names
      @throws NullPointerException description...
      */
-    public void isIn(String... fieldValues)  {
+    public IQueryExpressionBuilder isIn(String... fieldValues)  {
 
         var expression = in(fieldValues);
 
@@ -135,6 +158,29 @@ public class QueryExpressionBuilder implements IQueryExpressionBuilder {
         }
 
         this.builder.append(expression);
+
+        return this;
+    }
+
+    /**
+     *
+     @param queryExpansionDelegate function that accepts the query builder to expand the query behind
+     @throws NullPointerException description...
+     */
+    public IQueryExpressionBuilder or(Consumer<IQueryExpressionBuilder> queryExpansionDelegate)  {
+        if (builder == null) {
+            throw new NullPointerException("Builder (Buffer) is null");
+        }
+
+        this.builder = this.builder.replace(0, this.builder.lastIndexOf(System.lineSeparator()), "");
+
+        this.builder.append(String.format(" OR "));
+
+        queryExpansionDelegate.accept(this);
+
+        this.builder.append(System.lineSeparator());
+
+        return this;
     }
 
     private void defaultValidation(String value) {

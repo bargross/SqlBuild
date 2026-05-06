@@ -1,6 +1,6 @@
 package query.where;
 
-import query.build.IQuerySimpleBuilder;
+import query.build.simpleQuery.IQuerySimpleBuilder;
 import query.expression.IQueryExpressionBuilder;
 import query.join.IJoinExpressionBuilder;
 import java.util.function.Consumer;

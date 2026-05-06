@@ -31,7 +31,6 @@ public final class StringGuard {
         }
     }
 
-
     private static boolean isWhiteSpace(String value) {
         if (value == null) {
             throw new NullPointerException("Value is null");

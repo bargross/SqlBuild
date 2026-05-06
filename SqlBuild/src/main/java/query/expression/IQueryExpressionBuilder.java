@@ -1,10 +1,14 @@
 package query.expression;
 
+import java.util.function.Consumer;
+import java.util.function.Function;
+
 public interface IQueryExpressionBuilder {
-    String equals(String fieldValue);
-    void isEquals(String fieldValue);
-    String like(String fieldValue);
-    void isLike(String fieldValue);
-    String in(String... fieldValues);
-    void isIn(String... fieldValues);
+    IQueryExpressionBuilder equals(String fieldValue);
+    IQueryExpressionBuilder isEquals(String fieldValue);
+    IQueryExpressionBuilder like(String fieldValue);
+    IQueryExpressionBuilder isLike(String fieldValue);
+    IQueryExpressionBuilder in(String... fieldValues);
+    IQueryExpressionBuilder isIn(String... fieldValues);
+    IQueryExpressionBuilder or(Consumer<IQueryExpressionBuilder> queryExpansionDelegate);
 }

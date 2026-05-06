@@ -1,5 +1,7 @@
-package query.build;
+package query.build.queryComplex;
 
+import query.build.SQLQueryExpression;
+import query.build.simpleQuery.QuerySimpleBuilder;
 import query.expression.IQueryFieldExpressionBuilder;
 import util.iterator.GenericIterator;
 import util.mapper.Mapper;
@@ -11,9 +13,10 @@ public class QueryExtendedBuilder extends QuerySimpleBuilder implements IQueryEx
         super();
     }
 
-    public QueryExtendedBuilder(StringBuffer builder) {
-        super(builder);
-    }
+    // TODO: same as QuerySimpleBuilder constructor with buffer
+    // public QueryExtendedBuilder(StringBuffer builder) {
+    //    super(builder);
+    // }
 
     /**
      *
@@ -22,7 +25,7 @@ public class QueryExtendedBuilder extends QuerySimpleBuilder implements IQueryEx
      @throws IllegalCallerException description...
      @throws IllegalArgumentException description...
      */
-    public IQuerySimpleBuilder selectDistinct(Consumer<IQueryFieldExpressionBuilder> fieldBuilderPredicate) throws IllegalCallerException, IllegalArgumentException {
+    public IQueryExtendedBuilder selectDistinct(Consumer<IQueryFieldExpressionBuilder> fieldBuilderPredicate) throws IllegalCallerException, IllegalArgumentException {
 
         if(primarySQLFunctionDeclared) {
             throw new IllegalCallerException("Primary SQL function declaration not permitted more than once");
@@ -54,7 +57,7 @@ public class QueryExtendedBuilder extends QuerySimpleBuilder implements IQueryEx
      @return QuerySimpleBuilder
      @throws IllegalCallerException description...
      */
-    public IQuerySimpleBuilder selectAllDistinct() throws IllegalCallerException {
+    public IQueryExtendedBuilder selectAllDistinct() throws IllegalCallerException {
         if(primarySQLFunctionDeclared) {
             throw new IllegalCallerException("Primary SQL function declaration not permitted more than once");
         }
@@ -75,7 +78,7 @@ public class QueryExtendedBuilder extends QuerySimpleBuilder implements IQueryEx
      @throws IllegalCallerException description...
      @throws IllegalArgumentException description...
      */
-    public IQuerySimpleBuilder selectTop(Integer maxRows, Consumer<IQueryFieldExpressionBuilder> fieldBuilderPredicate) throws IllegalCallerException, IllegalArgumentException {
+    public IQueryExtendedBuilder selectTop(Integer maxRows, Consumer<IQueryFieldExpressionBuilder> fieldBuilderPredicate) throws IllegalCallerException, IllegalArgumentException {
 
         if(primarySQLFunctionDeclared) {
             throw new IllegalCallerException("Primary SQL function declaration not permitted more than once");
@@ -111,7 +114,7 @@ public class QueryExtendedBuilder extends QuerySimpleBuilder implements IQueryEx
      @return QuerySimpleBuilder
      @throws IllegalCallerException description...
      */
-    public IQuerySimpleBuilder selectAllTop(Integer maxRows) throws IllegalCallerException {
+    public IQueryExtendedBuilder selectAllTop(Integer maxRows) throws IllegalCallerException {
         if (primarySQLFunctionDeclared) {
             throw new IllegalCallerException("Primary SQL function declaration not permitted more than once");
         }

@@ -11,4 +11,9 @@ public final class ComparatorGenerator {
             return valueAsString.compareTo(valueToCompareToAsString);
         };
     }
+
+    @SuppressWarnings("ComparatorResultComparison")
+    public static <TGenericValue> boolean areEqual(TGenericValue original, TGenericValue valueToCompareTo) {
+        return generate().compare(original, valueToCompareTo) == 1;
+    }
 }

@@ -1,7 +1,7 @@
 package procedure;
 
-import query.build.IQueryExtendedBuilder;
-import query.build.QueryExtendedBuilder;
+import query.build.queryComplex.IQueryExtendedBuilder;
+import query.build.queryComplex.QueryExtendedBuilder;
 import util.guard.ReservedKeywordGuard;
 import util.guard.storedProcedureReserved.RESERVED;
 

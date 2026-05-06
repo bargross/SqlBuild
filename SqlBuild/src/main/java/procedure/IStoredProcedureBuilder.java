@@ -1,6 +1,6 @@
 package procedure;
 
-import query.build.IQueryExtendedBuilder;
+import query.build.queryComplex.IQueryExtendedBuilder;
 
 import java.util.function.Consumer;
 

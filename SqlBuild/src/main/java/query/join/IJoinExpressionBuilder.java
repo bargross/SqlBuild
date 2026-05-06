@@ -1,7 +1,7 @@
 package query.join;
 
 import client.enums.SQLJoin;
-import query.build.IQuerySimpleBuilder;
+import query.build.simpleQuery.IQuerySimpleBuilder;
 import query.expression.IQueryExpressionBuilder;
 
 import java.util.function.Consumer;
