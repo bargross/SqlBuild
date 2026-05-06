@@ -44,22 +44,22 @@ public class FieldDefinitionBuilder implements IFieldDefinitionBuilder {
 
         subQueryBuilder.accept(queryBuilder);
 
-        setField(queryBuilder.as(asFieldName).get());
+        setColumnField(queryBuilder.as(asFieldName).get(), SQLFunction.NOOP);
 
         return this;
     }
 
-    private FieldDefinitionBuilder setColumnField(String field, SQLFunction function) {
-        if (StringGuard.isEmptyOrWhiteSpace(field)) {
-            throw new IllegalArgumentException("");
+    private FieldDefinitionBuilder setColumnField(String column, SQLFunction function) {
+        if (StringGuard.isEmptyOrWhiteSpace(column)) {
+            throw new IllegalArgumentException("Column name cannot be null, empty or white space.");
         }
 
-        if (StringGuard.isForbiddenKeyword(field)) {
-            throw new IllegalArgumentException("");
+        if (StringGuard.isForbiddenKeyword(column)) {
+            throw new IllegalArgumentException("Column name contains forbidden sql keywords.");
         }
 
         if (function == null) {
-            throw new NullPointerException("");
+            throw new NullPointerException("No function expression provided.");
         }
 
         if (!fieldsInstantiated) {
@@ -67,7 +67,7 @@ public class FieldDefinitionBuilder implements IFieldDefinitionBuilder {
             fieldsInstantiated = true;
         }
 
-        fields.add(new FieldDefinition(field, function));
+        fields.add(new FieldDefinition(column, function));
 
         return this;
     }
