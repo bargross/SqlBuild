@@ -9,8 +9,8 @@ import java.util.List;
 import java.util.function.Consumer;
 
 public interface IFieldDefinitionBuilder {
-    IFieldDefinitionBuilder setField(String field, SQLFunction function);
-    IFieldDefinitionBuilder setField(String field);
-    IFieldDefinitionBuilder setFieldAsQuery(Consumer<SubQuerySimpleBuilder> subQueryBuilder, String asFieldName) throws EmptyQueryException;
+    IFieldDefinitionBuilder setColumn(String field, SQLFunction function);
+    IFieldDefinitionBuilder setColumn(String field);
+    IFieldDefinitionBuilder setColumnAsQuery(Consumer<SubQuerySimpleBuilder> subQueryBuilder, String asFieldName) throws EmptyQueryException;
     List<FieldDefinition> toList();
 }
