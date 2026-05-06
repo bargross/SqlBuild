@@ -17,7 +17,7 @@ import java.util.Objects;
 import java.util.function.Consumer;
 
 public class QuerySimpleBuilder implements IQuerySimpleBuilder {
-    protected final StringBuffer queryBuilder;
+    protected StringBuffer queryBuilder;
     protected final WhereExpressionBuilder whereBuilder;
     protected final JoinExpressionBuilder joinBuilder;
     protected final QueryFieldExpressionBuilder fieldBuilder;

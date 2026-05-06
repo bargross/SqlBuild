@@ -1,7 +1,8 @@
 package procedure;
 
-import query.build.queryComplex.IQueryExtendedBuilder;
-import query.build.queryComplex.QueryExtendedBuilder;
+import procedure.queryextended.QueryComplexBuilderExtended;
+import query.build.queryComplex.IQueryComplexBuilder;
+import query.build.queryComplex.QueryComplexBuilder;
 import util.guard.ReservedKeywordGuard;
 import util.guard.storedProcedureReserved.RESERVED;
 
@@ -10,21 +11,11 @@ import java.util.function.Consumer;
 public class StoredProcedureBuilder implements IStoredProcedureBuilder {
 
     private final StringBuffer builder;
-    private final IQueryExtendedBuilder queryBuilder;
-
-    public StoredProcedureBuilder(StringBuffer builder, QueryExtendedBuilder queryBuilder) {
-        this.builder = builder;
-        this.queryBuilder = queryBuilder;
-    }
+    private final QueryComplexBuilderExtended queryBuilder;
 
     public StoredProcedureBuilder() {
         this.builder = new StringBuffer();
-        this.queryBuilder = new QueryExtendedBuilder(this.builder);
-    }
-
-    public StoredProcedureBuilder(StringBuffer builder, IQueryExtendedBuilder queryBuilder) {
-        this.builder = builder;
-        this.queryBuilder = queryBuilder;
+        this.queryBuilder = new QueryComplexBuilderExtended(this.builder);
     }
 
     public IStoredProcedureBuilder createProcedure(String name) {
@@ -39,8 +30,8 @@ public class StoredProcedureBuilder implements IStoredProcedureBuilder {
         return this;
     }
 
-    public IStoredProcedureBuilder go(Consumer<IQueryExtendedBuilder> action) {
-        action.accept(this.queryBuilder);
+    public IStoredProcedureBuilder go(Consumer<QueryComplexBuilderExtended> action) {
+        action.accept(queryBuilder);
 
         return this;
     }
