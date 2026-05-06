@@ -26,6 +26,6 @@ public class Program {
             .with(x -> x.like("someValue"))
             .build();
 
-        System.out.println(parameterizedQuery.get());
+        System.out.println(parameterizedQuery.getSqlString());
     }
 }
