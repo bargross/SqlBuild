@@ -25,7 +25,7 @@ jobs:
     
     - name: Build with Maven
       run: mvn clean compile
-      working-directory: ../../SqlBuild/pom.xml
+      working-directory: ./SqlBuild
       
 # TODO: Add tests on build for GitHub actions
 #    - name: Run tests (if any)
@@ -33,7 +33,7 @@ jobs:
       
     - name: Package JAR
       run: mvn package
-      working-directory: ../../SqlBuild/pom.xml
+      working-directory: ./SqlBuild
       
     - name: Upload JAR artifact
       uses: actions/upload-artifact@v4
