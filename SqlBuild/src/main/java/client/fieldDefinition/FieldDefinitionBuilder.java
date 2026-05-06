@@ -44,9 +44,7 @@ public class FieldDefinitionBuilder implements IFieldDefinitionBuilder {
 
         subQueryBuilder.accept(queryBuilder);
 
-        setColumnField(queryBuilder.as(asFieldName).get(), SQLFunction.NOOP);
-
-        return this;
+        return setColumnField(queryBuilder.as(asFieldName).getSqlString(), SQLFunction.NOOP);
     }
 
     private FieldDefinitionBuilder setColumnField(String column, SQLFunction function) {
@@ -55,11 +53,11 @@ public class FieldDefinitionBuilder implements IFieldDefinitionBuilder {
         }
 
         if (StringGuard.isForbiddenKeyword(column)) {
-            throw new IllegalArgumentException("Column name contains forbidden sql keywords.");
+            throw new IllegalArgumentException("Column name contains forbidden SQL keyword/s.");
         }
 
         if (function == null) {
-            throw new NullPointerException("No function expression provided.");
+            throw new NullPointerException("SQL Function not provided.");
         }
 
         if (!fieldsInstantiated) {

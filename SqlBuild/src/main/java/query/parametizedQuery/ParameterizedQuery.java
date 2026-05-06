@@ -21,7 +21,7 @@ public class ParameterizedQuery  implements IParameterizedQuery  {
     }
 
 
-    public String get() {
+    public String getSqlString() {
         return _query;
     }
 }
