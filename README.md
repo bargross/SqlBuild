@@ -133,7 +133,7 @@ try (PreparedStatement stmt = connection.prepareStatement(sql)) {
 |----------------------------------------------|---------------------------------------------------------------|
 | Microservices developers                     | Lightweight, no ORM overhead, quick startup                   |
 | Teams avoiding vendor lock-in                | Generate SQL for any database, control your own connections   |
-| Performance-sensitive apps	No reflection  | No reflection, no proxy objects, just strings                 |
+| Performance-sensitive apps	               | No reflection, no proxy objects, just strings                 |
 | Developers who hate string concatenation     | Type-safe, readable, maintainable                             |
 | Educational contexts                         | Learn SQL structure without writing raw strings               |
 | Utility and tooling authors                  | Build database tools without heavyweight dependencies         |
