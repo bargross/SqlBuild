@@ -251,8 +251,8 @@ try (PreparedStatement stmt = connection.prepareStatement(sql)) {
 
 | Element | Value |
 |---------|-------|
-| groupId | `com.yourgroup` |
-| artifactId | `jlambdaquery` |
+| groupId | `com.sqlbuild` |
+| artifactId | `sqlbuild` |
 | version | `1.0.0` |
 
 ```xml
