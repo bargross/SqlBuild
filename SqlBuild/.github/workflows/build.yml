@@ -2,10 +2,10 @@ name: Java CI
 
 on:
   push:
-    branches: [ "*" ]
+    branches: [ "main" ]
 
   pull_request:
-    branches: [ "*" ]
+    branches: [ "main" ]
 
 jobs:
   build:
@@ -27,7 +27,7 @@ jobs:
     - name: Build with Maven
       run: mvn clean compile
 
-# TODO: Add tests on build for github actions
+# TODO: Add tests on build for GitHub actions
 #    - name: Run tests (if any)
 #      run: mvn test
       
