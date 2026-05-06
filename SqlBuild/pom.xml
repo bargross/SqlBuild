@@ -6,8 +6,8 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.example</groupId>
-    <artifactId>SqlBuild</artifactId>
+    <groupId>com.sqlbuild</groupId>
+    <artifactId>sqlbuild</artifactId>
     <version>1.0.0</version>
     <packaging>jar</packaging>
 
