@@ -65,13 +65,13 @@ String sql = query.getSqlString();
 ```java
 
 var fields = new FieldDefinitionBuilder()
-    .setField("b", SQLFunction.MAX)
+    .setColumn("b", SQLFunction.MAX)
         .setFieldAsQuery(builder ->
                 builder.select(columnBuilder ->
                         columnBuilder.setColumn("orders", SQLFunction.AVG))
                         .from("table-c"), "averageOrders")
-    .setField("c")
-    .setField("n")
+    .setColumn("c")
+    .setColumn("n")
     .toList();
 
 var query = new QuerySimpleBuilder()
@@ -91,13 +91,13 @@ String sql = query.getSqlString();
 ```java
 
 var fields = new FieldDefinitionBuilder()
-    .setField("b", SQLFunction.MAX)
+    .setColumn("b", SQLFunction.MAX)
         .setFieldAsQuery(builder ->
                 builder.select(columnBuilder ->
                         columnBuilder.setColumn("orders", SQLFunction.AVG))
                         .from("table-c"), "averageOrders")
-    .setField("c")
-    .setField("n")
+    .setColumn("c")
+    .setColumn("n")
     .toList();
 
 var query = new QuerySimpleBuilder()
