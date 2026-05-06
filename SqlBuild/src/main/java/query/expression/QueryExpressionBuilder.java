@@ -9,7 +9,6 @@ public class QueryExpressionBuilder implements IQueryExpressionBuilder {
 
     private String fieldName;
     private StringBuffer builder;
-    private boolean isSubQuery;
 
     public QueryExpressionBuilder(StringBuffer builder) {
         this(null, builder, false);
@@ -32,29 +31,21 @@ public class QueryExpressionBuilder implements IQueryExpressionBuilder {
         this.builder = builder;
     }
 
-    public QueryExpressionBuilder() {
-        builder = new StringBuffer("( ");
-
-        isSubQuery = true;
-    }
-
     /**
      *
-     @param field field/column
-     @return void
+     @param column field/column
      */
-    public void setField(String field) {
-        if(StringGuard.isEmptyOrWhiteSpace(field)) {
+    public void setColumn(String column) {
+        if(StringGuard.isEmptyOrWhiteSpace(column)) {
             throw new IllegalArgumentException("Invalid field");
         }
 
-        fieldName = field;
+        fieldName = column;
     }
 
     /**
      *
      @param builder string buffer
-     @return void
      */
     public void setBuilder(StringBuffer builder) {
         if (builder == null) {
@@ -174,7 +165,7 @@ public class QueryExpressionBuilder implements IQueryExpressionBuilder {
 
         this.builder = this.builder.replace(0, this.builder.lastIndexOf(System.lineSeparator()), "");
 
-        this.builder.append(String.format(" OR "));
+        this.builder.append(" OR ");
 
         queryExpansionDelegate.accept(this);
 

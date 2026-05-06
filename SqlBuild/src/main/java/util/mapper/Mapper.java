@@ -44,7 +44,7 @@ public class Mapper {
     }
 
     public static <TValue> TValue[] filter(TValue[] values, Function<TValue, Boolean> validator) {
-        var filtered = new ArrayList<TValue>(values.length/2);
+        var filtered = new ArrayList<TValue>(values.length / 2);
 
         for (TValue value : values) {
             if (validator.apply(value)) {

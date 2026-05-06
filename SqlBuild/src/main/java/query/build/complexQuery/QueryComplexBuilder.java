@@ -1,4 +1,4 @@
-package query.build.queryComplex;
+package query.build.complexQuery;
 
 import query.build.SQLQueryExpression;
 import query.build.simpleQuery.QuerySimpleBuilder;
