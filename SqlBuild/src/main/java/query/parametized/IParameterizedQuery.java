@@ -1,4 +1,4 @@
-package query.parametizedQuery;
+package query.parametized;
 
 public interface IParameterizedQuery {
     public String getSqlString();

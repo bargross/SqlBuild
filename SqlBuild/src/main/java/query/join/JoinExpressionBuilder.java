@@ -1,7 +1,8 @@
 package query.join;
 
 import client.enums.SQLJoin;
-import query.build.simpleQuery.IQuerySimpleBuilder;
+import query.build.simple.IQuerySimpleBuilder;
+import util.guard.ReservedKeywordGuard;
 import util.guard.StringGuard;
 import java.util.function.Consumer;
 import query.expression.*;
@@ -19,23 +20,23 @@ public class JoinExpressionBuilder implements IJoinExpressionBuilder {
         this(null, null, expressionBuilder, false);
     }
 
-    public JoinExpressionBuilder(StringBuffer builder, String field) {
-        this(builder, field, null, true);
+    public JoinExpressionBuilder(StringBuffer builder, String column) {
+        this(builder, column, null, true);
     }
 
-    private JoinExpressionBuilder(StringBuffer builder, String field, QueryExpressionBuilder expBuilder, boolean validateField) {
+    private JoinExpressionBuilder(StringBuffer builder, String column, QueryExpressionBuilder expBuilder, boolean validateField) {
 
-        if(validateField && StringGuard.isEmptyOrWhiteSpace(field)) {
+        if(validateField && StringGuard.isEmptyOrWhiteSpace(column)) {
             throw new IllegalArgumentException();
         }
 
-        if(validateField && StringGuard.isForbiddenKeyword(field)) {
+        if(validateField && ReservedKeywordGuard.hasReservedKeywords(column)) {
             throw new IllegalArgumentException();
         }
 
         if(expBuilder == null) {
             if(validateField) {
-                this.expressionBuilder = new QueryExpressionBuilder(field, builder);
+                this.expressionBuilder = new QueryExpressionBuilder(column, builder);
             } else {
                 this.expressionBuilder = new QueryExpressionBuilder(builder);
             }
@@ -92,7 +93,7 @@ public class JoinExpressionBuilder implements IJoinExpressionBuilder {
             throw new IllegalArgumentException("Invalid field name");
         }
 
-        if (StringGuard.isForbiddenKeyword(field)) {
+        if (ReservedKeywordGuard.hasReservedKeywords(field)) {
             throw new IllegalArgumentException();
         }
 
@@ -121,4 +122,7 @@ public class JoinExpressionBuilder implements IJoinExpressionBuilder {
 
         return querySimpleBuilder;
     }
+
+
+
 }

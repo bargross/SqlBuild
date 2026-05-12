@@ -1,6 +1,11 @@
 package query.where;
 
-import query.build.simpleQuery.IQuerySimpleBuilder;
+import query.build.SQLQueryExpression;
+import query.build.simple.IQuerySimpleBuilder;
+import util.format.StringFormatter;
+import util.guard.ReservedKeywordGuard;
+import util.format.SQLStringFormatter;
+import util.guard.SQLStringGuard;
 import util.guard.StringGuard;
 import query.expression.IQueryExpressionBuilder;
 import query.expression.QueryExpressionBuilder;
@@ -38,7 +43,7 @@ public class WhereExpressionBuilder implements IWhereExpressionBuilder {
             throw new IllegalArgumentException("Invalid field name");
         }
 
-        if (validateField && StringGuard.isForbiddenKeyword(field)) {
+        if (validateField && ReservedKeywordGuard.hasReservedKeywords(field)) {
             throw new IllegalArgumentException("Field name has or is a reserved sql keyword");
         }
 
@@ -70,40 +75,11 @@ public class WhereExpressionBuilder implements IWhereExpressionBuilder {
      @param column the column within sql the table
      @throws IllegalArgumentException if the field is empty or if is a forbidden sql keyword
      */
-    public void setField(String column) {
-        if (StringGuard.isEmptyOrWhiteSpace(column)) {
-            throw new IllegalArgumentException("Invalid field");
-        }
-
-        if (StringGuard.isForbiddenKeyword(column)) {
-            throw new IllegalArgumentException("Forbidden field name");
-        }
-
+    public void setColumn(String column) {
         this._expressionBuilder.setColumn(column);
         this._joinBuilder.setColumn(column);
 
         this.field = column;
-    }
-
-    /**
-     * Sets the internal JoinExpressionBuilder
-     @param joinBuilder the join builder used internally
-     @throws NullPointerException if the parameter is null
-     */
-    public void setJoinBuilder(JoinExpressionBuilder joinBuilder) {
-        if (joinBuilder == null) {
-            throw new NullPointerException("Builder is null");
-        }
-
-        this._joinBuilder = joinBuilder;
-        this._joinBuilder.setColumn(this.field);
-    }
-
-    public void setQueryBuilderRef(IQuerySimpleBuilder querySimpleBuilder) {
-        this._querySimpleBuilderRef = querySimpleBuilder;
-    }
-    public void clearQueryBuilderRef() {
-        this._querySimpleBuilderRef = null;
     }
 
     /**
@@ -128,6 +104,52 @@ public class WhereExpressionBuilder implements IWhereExpressionBuilder {
         return _querySimpleBuilderRef;
     }
 
+    public IQuerySimpleBuilder orderBy(String column) {
+        defaultValidation(column, "column");
+
+        var columnNameWithEscapedQuotes = SQLStringFormatter.escapeQuotes(column);
+        var columnWithQuotes = SQLStringFormatter.addQuotes(columnNameWithEscapedQuotes);
+
+        this._rootBuilder.append(SQLQueryExpression.ORDERBY.getKeywordWithPostFix(columnWithQuotes));
+
+        return _querySimpleBuilderRef;
+    }
+
+    public IQuerySimpleBuilder groupBy(String column) {
+        defaultValidation(column, "column");
+
+        var columnNameWithEscapedQuotes = SQLStringFormatter.escapeQuotes(column);
+        var columnWithQuotes = SQLStringFormatter.addQuotes(columnNameWithEscapedQuotes);
+
+        this._rootBuilder.append(SQLQueryExpression.GROUPBY.getKeywordWithPostFix(columnWithQuotes));
+
+        return _querySimpleBuilderRef;
+    }
+
+    /// INTERNAL METHODS
+    ///
+
+    /**
+     * Sets the internal JoinExpressionBuilder
+     @param joinBuilder the join builder used internally
+     @throws NullPointerException if the parameter is null
+     */
+    public void setJoinBuilder(JoinExpressionBuilder joinBuilder) {
+        if (joinBuilder == null) {
+            throw new NullPointerException("Builder is null");
+        }
+
+        this._joinBuilder = joinBuilder;
+        this._joinBuilder.setColumn(this.field);
+    }
+
+    public void setQueryBuilderRef(IQuerySimpleBuilder querySimpleBuilder) {
+        this._querySimpleBuilderRef = querySimpleBuilder;
+    }
+    public void clearQueryBuilderRef() {
+        this._querySimpleBuilderRef = null;
+    }
+
     public IQuerySimpleBuilder getQueryBuilderRef() {
         if (_querySimpleBuilderRef == null) {
             throw new NullPointerException(String.format("%s ref is null", IQuerySimpleBuilder.class.getName()));
@@ -138,5 +160,23 @@ public class WhereExpressionBuilder implements IWhereExpressionBuilder {
 
     public StringBuffer getRootBuilder() {
         return _rootBuilder;
+    }
+
+    private void defaultValidation(String value, String name) {
+        if (StringGuard.isEmptyOrWhiteSpace(value)) {
+            throw new IllegalArgumentException(String.format("%s name cannot be null, empty or white space.", StringFormatter.singleWordToCamelCase(name)));
+        }
+
+        if (!SQLStringGuard.isNameInValid(value)) {
+            throw new IllegalArgumentException(String.format("%s name is not valid, only letters, numbers and characters such as _ are allowed.", StringFormatter.singleWordToCamelCase(name)));
+        }
+
+        if (SQLStringGuard.hasQuotes(value)) {
+            throw new IllegalArgumentException(String.format("Quotes are not allowed in %s.", name));
+        }
+
+        if (ReservedKeywordGuard.hasReservedKeywords(value)) {
+            throw new IllegalArgumentException(String.format("%s name contains forbidden SQL keyword/s.", StringFormatter.singleWordToCamelCase(name)));
+        }
     }
 }

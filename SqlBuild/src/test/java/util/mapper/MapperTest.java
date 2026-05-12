@@ -23,7 +23,7 @@ class MapperTest {
 
     @Test
     void testMapToArray() {
-        String[] result = Mapper.mapToArray(List.of(new String()), null);
+        String[] result = Mapper.toArray(List.of(new String()));
         Assertions.assertArrayEquals(new String[]{new String()}, result);
     }
 

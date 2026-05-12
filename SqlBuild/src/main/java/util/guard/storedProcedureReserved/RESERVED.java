@@ -64,7 +64,7 @@ public enum RESERVED {
     }
 
     public static String[] getAllKeywords() throws StreamAlreadyConsumedException {
-        return Mapper.mapToArray(Mapper.toList(Arrays.stream(RESERVED.values())), x -> x.keyword);
+        return Mapper.toArray(Mapper.toList(Arrays.stream(RESERVED.values())), x -> x.keyword);
     }
 
     public String getKeyword() {

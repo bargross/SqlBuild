@@ -37,7 +37,7 @@ public class Mapper {
     }
 
 
-    public static <TValue, TResult> TResult[] mapToArray(List<TValue> values, Function<TValue, TResult> predicate) {
+    public static <TValue, TResult> TResult[] toArray(List<TValue> values, Function<TValue, TResult> predicate) {
         var resultList = map(values, predicate);
 
         return toArray(resultList);

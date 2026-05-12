@@ -1,6 +1,6 @@
-package query.build.complexQuery;
+package query.build.complex;
 
-import query.build.simpleQuery.IQuerySimpleBuilder;
+import query.build.simple.IQuerySimpleBuilder;
 import query.expression.IQueryFieldExpressionBuilder;
 
 import java.util.function.Consumer;

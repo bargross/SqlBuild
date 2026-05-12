@@ -1,8 +1,8 @@
 package subquery;
 
 import exception.EmptyQueryException;
-import query.build.simpleQuery.QuerySimpleBuilder;
-import query.parametizedQuery.ParameterizedQuery;
+import query.build.simple.QuerySimpleBuilder;
+import query.parametized.ParameterizedQuery;
 import util.guard.StringGuard;
 
 public class SubQuerySimpleBuilder extends QuerySimpleBuilder implements ISubQuerySimpleBuilder {

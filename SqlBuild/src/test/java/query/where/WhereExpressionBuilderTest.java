@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import query.build.simpleQuery.IQuerySimpleBuilder;
+import query.build.simple.IQuerySimpleBuilder;
 import query.expression.QueryExpressionBuilder;
 import query.join.JoinExpressionBuilder;
 import subquery.SubQuerySimpleBuilder;

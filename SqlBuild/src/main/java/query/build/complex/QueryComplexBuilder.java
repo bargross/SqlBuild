@@ -1,7 +1,7 @@
-package query.build.complexQuery;
+package query.build.complex;
 
 import query.build.SQLQueryExpression;
-import query.build.simpleQuery.QuerySimpleBuilder;
+import query.build.simple.QuerySimpleBuilder;
 import query.expression.IQueryFieldExpressionBuilder;
 import util.iterator.GenericIterator;
 import util.mapper.Mapper;

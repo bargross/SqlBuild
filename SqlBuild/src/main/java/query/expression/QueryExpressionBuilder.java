@@ -1,7 +1,11 @@
 package query.expression;
 
+import util.format.SQLStringFormatter;
 import util.guard.ReservedKeywordGuard;
+import util.guard.SQLStringGuard;
 import util.guard.StringGuard;
+import util.iterator.GenericIterator;
+import util.mapper.Mapper;
 
 import java.util.function.Consumer;
 
@@ -36,11 +40,9 @@ public class QueryExpressionBuilder implements IQueryExpressionBuilder {
      @param column field/column
      */
     public void setColumn(String column) {
-        if(StringGuard.isEmptyOrWhiteSpace(column)) {
-            throw new IllegalArgumentException("Invalid field");
-        }
+        defaultValidation(column);
 
-        fieldName = column;
+        fieldName = formatTableOrField(column);
     }
 
     /**
@@ -63,27 +65,31 @@ public class QueryExpressionBuilder implements IQueryExpressionBuilder {
     public IQueryExpressionBuilder equals(String fieldValue) {
         defaultValidation(fieldValue);
 
-        this.builder.append(String.format("%s = %s%s", fieldName, fieldValue, System.lineSeparator()));
+        var formattedField = formatTableOrField(fieldValue);
+
+        this.builder.append(String.format("%s = %s%s", fieldName, formattedField, System.lineSeparator()));
 
         return this;
     }
 
-    /**
-     *
-     @param fieldValue column value
-     @throws NullPointerException description...
-     */
-    public IQueryExpressionBuilder isEquals(String fieldValue) {
-        var expression = equals(fieldValue);
-
-        if(builder == null) {
-            throw new NullPointerException("Builder (Buffer) is null");
-        }
-
-        this.builder.append(expression);
-
-        return this;
-    }
+//    /**
+//     *
+//     @param fieldValue column value
+//     @throws NullPointerException description...
+//     */
+//    public IQueryExpressionBuilder equals(String fieldValue) {
+//        defaultValidation(fieldValue);
+//
+//        var expression = equals(fieldValue);
+//
+//        if(builder == null) {
+//            throw new NullPointerException("Builder (Buffer) is null");
+//        }
+//
+//        this.builder.append(expression);
+//
+//        return this;
+//    }
 
     /**
      *
@@ -94,7 +100,9 @@ public class QueryExpressionBuilder implements IQueryExpressionBuilder {
     public IQueryExpressionBuilder like(String fieldValue) {
         defaultValidation(fieldValue);
 
-        var expression = String.format("%s LIKE %s%s", fieldName, fieldValue, System.lineSeparator());
+        var formattedField = formatTableOrField(fieldValue);
+
+        var expression = String.format("%s LIKE %s%s", fieldName, formattedField, System.lineSeparator());
 
         this.builder.append(expression);
 
@@ -107,6 +115,8 @@ public class QueryExpressionBuilder implements IQueryExpressionBuilder {
      @throws NullPointerException description...
      */
     public IQueryExpressionBuilder isLike(String fieldValue) throws NullPointerException {
+        defaultValidation(fieldValue);
+
         var expression = like(fieldValue);
 
         if (builder == null) {
@@ -124,11 +134,11 @@ public class QueryExpressionBuilder implements IQueryExpressionBuilder {
      @return string containing IN SQL query expression
      */
     public IQueryExpressionBuilder in(String... fieldValues) {
-        if (ReservedKeywordGuard.hasReservedKeywords(fieldValues)) {
-            throw new IllegalArgumentException("Forbidden word found in sequence");
-        }
+        GenericIterator.each(fieldValues, value -> defaultValidation(value));
 
-        var expression = String.format("%s IN (%s)%s", fieldName, String.join(",", fieldValues), System.lineSeparator());
+        var formattedFieldValues = Mapper.map(fieldValues, value -> formatTableOrField(value));
+
+        var expression = String.format("%s IN (%s)%s", fieldName, String.join(",", formattedFieldValues), System.lineSeparator());
 
         this.builder.append(expression);
 
@@ -141,6 +151,8 @@ public class QueryExpressionBuilder implements IQueryExpressionBuilder {
      @throws NullPointerException description...
      */
     public IQueryExpressionBuilder isIn(String... fieldValues)  {
+
+        GenericIterator.each(fieldValues, value -> defaultValidation(value));
 
         var expression = in(fieldValues);
 
@@ -176,11 +188,24 @@ public class QueryExpressionBuilder implements IQueryExpressionBuilder {
 
     private void defaultValidation(String value) {
         if (StringGuard.isEmptyOrWhiteSpace(value)) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Invalid field");
         }
 
-        if (StringGuard.isForbiddenKeyword(value)) {
+        if (SQLStringGuard.isNameInValid(value)) {
+            throw new IllegalArgumentException("Invalid table name, only characters a-zA-Z 0-9 & _ are allowed.");
+        }
+
+        if (SQLStringGuard.hasQuotes(value)) {
+            throw new IllegalArgumentException("Invalid table name, single quotes not allowed.");
+        }
+
+        if (ReservedKeywordGuard.hasReservedKeywords(value)) {
             throw new IllegalArgumentException();
         }
+    }
+
+    private String formatTableOrField(String value) {
+        var nameWithEscapedQuotes = SQLStringFormatter.escapeQuotes(value);
+        return SQLStringFormatter.addQuotes(nameWithEscapedQuotes);
     }
 }

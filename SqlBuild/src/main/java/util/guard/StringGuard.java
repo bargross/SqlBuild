@@ -9,12 +9,6 @@ public final class StringGuard {
         return value == null || value.isEmpty() || isWhiteSpace(value);
     }
 
-    public static boolean isForbiddenKeyword(String value) {
-        defaultValidation(value, true);
-
-        return ReservedKeywordGuard.hasReservedKeywords(value.toUpperCase());
-    }
-
     public static boolean containsExcept(String value, String... except) {
         defaultValidation(value, false);
 
