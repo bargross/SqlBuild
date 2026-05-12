@@ -48,13 +48,13 @@ this introduces problems such as:
 
 
 ```java
-var query = new QuerySimpleBuilder()
+var query = SQLQuery
     .select(columnBuilder -> columnBuilder
         .setColumn("name")
         .setColumn("total", SQLFunction.SUM))
     .from("orders")
     .where("status")
-    .with(condition -> condition.equals("COMPLETED"))
+    .with(status -> status.equals("COMPLETED"))
     .build();
 
 String sql = query.getSqlString();
@@ -64,7 +64,7 @@ String sql = query.getSqlString();
 
 ```java
 
-var fields = new FieldDefinitionBuilder()
+var fields = SQLColumn
     .setColumn("b", SQLFunction.MAX)
         .setColumnAsQuery(builder ->
                 builder.select(columnBuilder ->
@@ -74,7 +74,7 @@ var fields = new FieldDefinitionBuilder()
     .setColumn("n")
     .toList();
 
-var query = new QuerySimpleBuilder()
+var query = SQLQuery
     .select(columnBuilder -> columnBuilder
         .setColumns(fields))
     .from("orders")
@@ -90,7 +90,7 @@ String sql = query.getSqlString();
 
 ```java
 
-var fields = new FieldDefinitionBuilder()
+var fields = SQLColumn
     .setColumn("b", SQLFunction.MAX)
         .setColumnAsQuery(builder ->
                 builder.select(columnBuilder ->
@@ -100,7 +100,7 @@ var fields = new FieldDefinitionBuilder()
     .setColumn("n")
     .toList();
 
-var query = new QuerySimpleBuilder()
+var query = SQLQuery
     .select(columnBuilder -> columnBuilder
         .setColumns(fields))
     .from("orders")
