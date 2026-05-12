@@ -1,4 +1,4 @@
-package query.parametizedQuery;
+package query.parametized;
 
 import exception.EmptyQueryException;
 import util.guard.StringGuard;

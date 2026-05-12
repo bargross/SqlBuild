@@ -2,6 +2,7 @@ package query.expression;
 
 import client.enums.SQLFunction;
 import client.models.FieldDefinition;
+import util.guard.ReservedKeywordGuard;
 import util.mapper.Mapper;
 import util.models.Tuple;
 import util.guard.StringGuard;
@@ -93,7 +94,7 @@ public class QueryFieldExpressionBuilder implements IQueryFieldExpressionBuilder
             throw new IllegalArgumentException("Field cannot be null or empty");
         }
 
-        if(StringGuard.isForbiddenKeyword(column)) {
+        if(ReservedKeywordGuard.hasReservedKeywords(column)) {
             throw new IllegalArgumentException("Field cannot be or contain a reserved sql keyword");
         }
 
@@ -121,7 +122,7 @@ public class QueryFieldExpressionBuilder implements IQueryFieldExpressionBuilder
             throw new NullPointerException("Invalid field mapping found in sequence");
         }
 
-        return Mapper.mapToArray(fields, fieldMapping -> {
+        return Mapper.toArray(fields, fieldMapping -> {
             var field = fieldMapping.getField();
 
             var function = fieldMapping.getFunction();

@@ -1,13 +1,12 @@
-
-import client.fieldDefinition.FieldDefinitionBuilder;
 import client.enums.SQLFunction;
 import exception.EmptyQueryException;
-import query.build.simpleQuery.QuerySimpleBuilder;
+import sql.SqlQuery;
+import sql.SQLColumn;
 
 public class Program {
     public void Main(String[] args) throws EmptyQueryException {
 
-        var fields = new FieldDefinitionBuilder()
+        var fields = SQLColumn
             .setColumn("b", SQLFunction.MAX)
                 .setColumnAsQuery(builder ->
                         builder.select(columnBuilder ->
@@ -17,7 +16,7 @@ public class Program {
             .setColumn("n")
             .toList();
 
-        var parameterizedQuery = new QuerySimpleBuilder()
+        var parameterizedQuery = SqlQuery
             .select(fieldBuilder -> fieldBuilder.setColumns(fields))
             .from("table-b")
             .join("table-c")

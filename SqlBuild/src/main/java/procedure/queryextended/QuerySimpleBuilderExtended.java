@@ -1,6 +1,6 @@
 package procedure.queryextended;
 
-import query.build.simpleQuery.QuerySimpleBuilder;
+import query.build.simple.QuerySimpleBuilder;
 
 public class QuerySimpleBuilderExtended extends QuerySimpleBuilder {
     public QuerySimpleBuilderExtended(StringBuffer builder) {

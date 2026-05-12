@@ -1,9 +1,9 @@
-package query.build.simpleQuery;
+package query.build.simple;
 
 import exception.EmptyQueryException;
 import query.expression.IQueryFieldExpressionBuilder;
 import query.join.IJoinExpressionBuilder;
-import query.parametizedQuery.IParameterizedQuery;
+import query.parametized.IParameterizedQuery;
 import query.where.IWhereExpressionBuilder;
 import java.util.function.Consumer;
 

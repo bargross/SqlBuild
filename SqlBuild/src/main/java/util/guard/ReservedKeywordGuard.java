@@ -12,17 +12,21 @@ import java.util.List;
 public final class ReservedKeywordGuard {
 
     public static boolean hasReservedKeywords(String... fieldValues) {
-        return hasReserved(fieldValues, null);
+        var hasReservedKeywords = hasReserved(fieldValues, null);
+        if (fieldValues.length == 1 && hasReservedKeywords) {
+            return false;
+        }
+        return hasReservedKeywords;
     }
 
     public static boolean hasReservedKeywordsExcept(String[] except, String... fieldValues) {
         return hasReserved(fieldValues, except);
     }
 
-    public  static ArrayList<String> getInvalidKeywords(String... fieldNames) {
+    public static ArrayList<String> getInvalidKeywords(String... fieldNames) {
         var invalidKeywords = new ArrayList<String>();
 
-        if(fieldNames.length == 0) {
+        if(!hasReserved(fieldNames, null)) {
             return invalidKeywords;
         }
 
@@ -44,7 +48,7 @@ public final class ReservedKeywordGuard {
             return false;
         }
 
-        return Arrays
+        var hasReserved = Arrays
             .stream(values)
             .anyMatch(fieldName -> {
                 boolean wordIsReserved;
@@ -57,5 +61,7 @@ public final class ReservedKeywordGuard {
 
                 return exclude != null ? wordIsReserved && !ArrayGenericValueFinder.contains(exclude, fieldName) : wordIsReserved;
             });
+
+        return values.length == 1 && hasReserved ? false : hasReserved;
     }
 }

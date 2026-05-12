@@ -1,12 +1,13 @@
-package query.build.simpleQuery;
+package query.build.simple;
 
 import exception.EmptyQueryException;
 import query.build.SQLQueryExpression;
 import query.expression.IQueryFieldExpressionBuilder;
 import query.expression.QueryFieldExpressionBuilder;
-import query.parametizedQuery.IParameterizedQuery;
-import query.parametizedQuery.ParameterizedQuery;
-import util.guard.StringGuard;
+import query.parametized.IParameterizedQuery;
+import query.parametized.ParameterizedQuery;
+import util.guard.ReservedKeywordGuard;
+import util.guard.SQLStringGuard;
 import util.models.ITuple;
 import query.join.*;
 import query.where.*;
@@ -108,7 +109,15 @@ public class QuerySimpleBuilder implements IQuerySimpleBuilder {
             throw new IllegalCallerException("Columns or table not defined");
         }
 
-        if(StringGuard.isForbiddenKeyword(tableName)) {
+        if (SQLStringGuard.isNameInValid(tableName)) {
+            throw new IllegalArgumentException("Invalid table name, only characters a-zA-Z 0-9 & _ are allowed.");
+        }
+
+        if (SQLStringGuard.hasQuotes(tableName)) {
+            throw new IllegalArgumentException("Invalid table name, single quotes not allowed.");
+        }
+
+        if (ReservedKeywordGuard.hasReservedKeywords(tableName)) {
             throw new IllegalArgumentException("Forbidden sql keyword found in sequence");
         }
 
@@ -132,7 +141,7 @@ public class QuerySimpleBuilder implements IQuerySimpleBuilder {
             throw new IllegalCallerException("Columns or table not defined");
         }
 
-        whereBuilder.setField(field);
+        whereBuilder.setColumn(field);
 
         whereBuilder.setJoinBuilder(joinBuilder);
 
