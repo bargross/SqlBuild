@@ -141,7 +141,7 @@ try (PreparedStatement stmt = connection.prepareStatement(sql)) {
 
 ## What This Is Not
 
-| Category | What JLambdaQuery Does NOT Do |
+| Category | What SqlBuild Does NOT Do |
 |----------|-------------------------------|
 | **ORM** | No entity mapping, no persistence context, no lazy loading, no session management |
 | **JDBC Wrapper** | No connection management, no result set mapping, no transaction handling |
