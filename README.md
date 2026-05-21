@@ -1,5 +1,7 @@
 # SqlBuild
 
+*Package not yet released!!*
+
 **A lightweight, dependency-free SQL query builder with a functional API.**
 
 SqlBuild lets you build SQL queries programmatically using Java lambdas and type-safe expressions. No string concatenation. No heavy ORM. No runtime magic. Just clean, safe, and readable query construction.
